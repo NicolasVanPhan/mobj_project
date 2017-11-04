@@ -162,7 +162,5 @@ namespace Netlist {
 
 
   // Cell::toXml() à écrire ici...
-  void	Cell::toXml( std::stream& ostream)
-  {
-  }
+
 }  // Netlist namespace.
