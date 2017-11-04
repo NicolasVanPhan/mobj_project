@@ -103,5 +103,10 @@ namespace Netlist {
 
   void  Instance::toXml( std::ostream& ostream)
   {
+      ostream << "<instance name=\"" << name_
+              << "\" mastercell=\"" << masterCell_->getName()
+              << "\" x=\"" << position_.getX()
+              << "\" y=\"" << position_.getY()
+              << "\"/>" << std::endl;
   }
 }
