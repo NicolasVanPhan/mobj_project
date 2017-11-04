@@ -9,11 +9,16 @@ namespace Netlist {
      ,name_(name)
      ,position_()     
   {
+    Term*     term;
+
     // Duplicate terminals
     std::vector<Term*> src = model->getTerms();   // source vector
     std::vector<Term*>::iterator p; 
     for (p = src.begin(); p != src.end(); p++)
-      terms_.push_back(*p);
+    {
+      term = new Term(this, *p);
+      terms_.push_back(term);
+    }
 
     // Tell the owner cell it has one more instance
     owner->add(this);
