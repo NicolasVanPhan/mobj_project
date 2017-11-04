@@ -18,7 +18,6 @@ namespace Netlist {
     public:
       static       std::vector<Cell*>&     getAllCells       ();
       static       Cell*                   find              ( const std::string& );
-      static	   void			   allToXml	     ( std::ostream& ostream);
     public:                                                  
                                            Cell              ( const std::string& );
                                           ~Cell              ();

@@ -162,10 +162,6 @@ namespace Netlist {
 
 
   // Cell::toXml() à écrire ici...
- void Cell::allToXml( std::ostream& ostream)
-  {
-  }
-
   void	Cell::toXml( std::ostream& ostream)
   {
     ostream << indent++ << "<cell name=\"" << name_ << "\">" << std::endl;
