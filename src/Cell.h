@@ -18,6 +18,7 @@ namespace Netlist {
     public:
       static       std::vector<Cell*>&     getAllCells       ();
       static       Cell*                   find              ( const std::string& );
+      static	   void			   allToXml	     ( std::ostream& ostream);
     public:                                                  
                                            Cell              ( const std::string& );
                                           ~Cell              ();
@@ -38,7 +39,7 @@ namespace Netlist {
                    bool                    connect           ( const std::string& name, Net* net );
                    unsigned int            newNetId          ();
 
-		   void			   toXml	     ( std::stream& ostream);
+		   void			   toXml	     ( std::ostream& ostream);
     private:
       static  std::vector<Cell*>      cells_;
               std::string             name_;

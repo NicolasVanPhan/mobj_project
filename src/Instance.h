@@ -38,6 +38,8 @@ namespace Netlist {
 /* [X] */   void  add( Term* );
 /* [X] */   void  remove( Term* );
 
+	    void toXml ( std::ostream& ostream );
+
         private:
             /* ---------------- Attributes ------------- */
             Cell*               owner_;

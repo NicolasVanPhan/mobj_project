@@ -78,4 +78,8 @@ namespace Netlist {
         }
         return false;
     }
+
+    void Net::toXml ( std::ostream& ostream )
+    {
+    }
 }

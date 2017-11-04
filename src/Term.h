@@ -51,6 +51,8 @@ namespace Netlist {
 /* [X] */   inline void setDirection ( Direction );
 /* [X] */   void        setPosition  ( const Point& );
 /* [X] */   void        setPosition  ( int x, int y );
+
+	    void	toXml	     ( std::ostream& ostream );
         
         private :
             /* ------------ Attributes ---------------- */
