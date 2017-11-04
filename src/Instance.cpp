@@ -100,4 +100,8 @@ namespace Netlist {
     if (p != terms_.end())
       *p = NULL;
   }
+
+  void  Instance::toXml( std::ostream& ostream)
+  {
+  }
 }

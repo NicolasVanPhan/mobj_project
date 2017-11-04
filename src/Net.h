@@ -36,6 +36,8 @@ namespace Netlist {
 /* [X] */   void add    ( Node* );
 /* [X] */   bool remove ( Node* );
 
+	    void toXml ( std::ostream& ostream );
+
         private :
             /* -------- Attributes ------- */
             Cell*               owner_;
