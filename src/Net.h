@@ -8,6 +8,7 @@
 #include "Cell.h"
 #include "Node.h"
 #include "Instance.h"
+#include "Indentation.h"
 
 namespace Netlist {
 

@@ -5,6 +5,7 @@
 #include <string>
 #include "Node.h"
 #include "Point.h"
+#include "Indentation.h"
 
 namespace Netlist {
 

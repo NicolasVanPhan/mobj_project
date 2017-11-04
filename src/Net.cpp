@@ -91,11 +91,11 @@ namespace Netlist {
 
     void Net::toXml ( std::ostream& ostream )
     {
-        ostream << "<net name=\"" << name_
+        ostream << indent++ << "<net name=\"" << name_
                 << "\" type=\"" << Term::toString(type_)
                 << "\">" << std::endl;
         for (std::vector<Node*>::iterator p = nodes_.begin(); p != nodes_.end(); p++)
             (*p)->toXml(ostream);
-        ostream << "</net>" << std::endl;
+        ostream << --indent << "</net>" << std::endl;
     }
 }

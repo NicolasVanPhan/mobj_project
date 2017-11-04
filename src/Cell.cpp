@@ -168,19 +168,19 @@ namespace Netlist {
 
   void	Cell::toXml( std::ostream& ostream)
   {
-    ostream << "<cell name=\"" << name_ << "\">" << std::endl;
-    ostream << "<terms>" << std::endl;
+    ostream << indent++ << "<cell name=\"" << name_ << "\">" << std::endl;
+    ostream << indent << "<terms>" << std::endl;
     for (std::vector<Term*>::iterator p = terms_.begin(); p != terms_.end(); p++)
       (*p)->toXml(ostream);
-    ostream << "</terms>" << std::endl;
-    ostream << "<instances>" << std::endl;
+    ostream << indent << "</terms>" << std::endl;
+    ostream << indent << "<instances>" << std::endl;
     for (std::vector<Instance*>::iterator p = instances_.begin(); p != instances_.end(); p++)
       (*p)->toXml(ostream);
-    ostream << "</instances>" << std::endl;
-    ostream << "<nets>" << std::endl;
+    ostream << indent << "</instances>" << std::endl;
+    ostream << indent << "<nets>" << std::endl;
     for (std::vector<Net*>::iterator p = nets_.begin(); p != nets_.end(); p++)
       (*p)->toXml(ostream);
-    ostream << "</nets>" << std::endl;
-    ostream << "</cell>" << std::endl;
+    ostream << indent << "</nets>" << std::endl;
+    ostream << --indent << "</cell>" << std::endl;
   }
 }  // Netlist namespace.

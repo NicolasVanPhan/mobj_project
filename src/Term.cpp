@@ -131,7 +131,8 @@ namespace Netlist {
 
     void	Term::toXml ( std::ostream& ostream)
     {
-        ostream << "<term name=\"" << name_ << "\" direction=\"" << toString(direction_)
+        ostream << indent << "<term name=\"" << name_
+                << "\" direction=\"" << toString(direction_)
                 << "\"/>" << std::endl;
     }
 }

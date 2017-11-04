@@ -7,6 +7,7 @@
 #include "Term.h"
 #include "Point.h"
 #include "Net.h"
+#include "Indentation.h"
 
 namespace Netlist {
 
