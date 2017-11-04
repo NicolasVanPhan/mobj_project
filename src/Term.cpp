@@ -96,7 +96,8 @@ namespace Netlist {
     void        Term::setNet       ( Net* net )
     {
         // ici, net_ vaut l'ancien net
-        net_->remove(&node_);
+        if (net_ != NULL)
+          net_->remove(&node_);
         net_ = net;
         // la, net_ vaut le nouveau net
         net_->add(&node_);

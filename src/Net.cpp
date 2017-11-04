@@ -8,7 +8,7 @@ namespace Netlist {
           , name_(name)
           , id_(cell->newNetId())
           , type_(type)
-          , nodes_(NULL) 
+          , nodes_()
     {
         cell->add(this);
     }
@@ -54,14 +54,24 @@ namespace Netlist {
     // Modificators
     void                                Net::add    ( Node* node )
     {
-        // As in Spice, if there's already something plugged into
-        // this terminal, we don't replace it
-        if (node->getTerm() != NULL)
-            nodes_[getFreeNodeId()] = node;
+        size_t  free_id;
+
+        // As in Spice, one can plug a net into a terminal only if
+        // it's plugged to nothing
+        free_id = getFreeNodeId();
+        if (node->getTerm()->getNet() == NULL)
+        {
+            if (free_id == nodes_.size())
+                nodes_.push_back(node);
+            else
+                nodes_[free_id] = node;
+        }
         else
+        {
             std::cerr << "[Error] The net "
-                 << node->getTerm()->getNet()->getName() 
-                 << " is already connected to this node" << std::endl;
+                << node->getTerm()->getNet()->getName()
+                << " is already connected to this node" << std::endl;
+        }
     }
     bool                                Net::remove ( Node* node)
     {
