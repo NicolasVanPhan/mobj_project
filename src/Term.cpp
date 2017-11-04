@@ -98,9 +98,8 @@ namespace Netlist {
         // ici, net_ vaut l'ancien net
         if (net_ != NULL)
           net_->remove(&node_);
-        net_ = net;
         // la, net_ vaut le nouveau net
-        net_->add(&node_);
+        net->add(&node_);
     }
     void        Term::setNet       ( const std::string& name)
     {
