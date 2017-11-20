@@ -95,10 +95,10 @@ namespace Netlist {
     // Modificators
     void        Term::setNet       ( Net* net )
     {
-        // ici, net_ vaut l'ancien net
+        // If the Term is already plugged, unplug it
         if (net_ != NULL)
           net_->remove(&node_);
-        // la, net_ vaut le nouveau net
+        // Plug the new signal into the Term
         net->add(&node_);
     }
     void        Term::setNet       ( const std::string& name)
@@ -111,11 +111,11 @@ namespace Netlist {
             net = ((Instance*)owner_)->getCell()->getNet(name);
         if (net != NULL)
         {
-            // ici, net_ vaut l'ancien net
-            net_->remove(&node_);
-            net_ = net;
-            // la, net_ vaut le nouveau net
-            net_->add(&node_);
+            // If the Term is already plugged, unplug it
+            if (net_ != NULL)
+                net_->remove(&node_);
+            // Plug the new signal into the Term
+            net->add(&node_);
         }
         else
             std::cerr << "[Error] Net " << name << " doesn't exist" << std::endl;
