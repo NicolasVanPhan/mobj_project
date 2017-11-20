@@ -26,9 +26,9 @@ namespace Netlist {
 
   Instance::~Instance   ()
   {
-    /* There's no need to take into account the fact that terminals
-     * might be plugged because this destructor calls the Term's destructors
-     * that take care of it */
+    // Remove terminals
+    while (!terms_.empty())
+        delete *terms_.begin();
 
     // Tell the owner cell it has one less instance
     owner_->remove(this);

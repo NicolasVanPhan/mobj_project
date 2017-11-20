@@ -15,8 +15,13 @@ namespace Netlist {
     Net::~Net    ( )
     {
         std::vector<Node*>::iterator inode;
+        // Unplug Terms connected to this Net
         for (inode = nodes_.begin(); inode != nodes_.end(); inode++)
             (*inode)->getTerm()->setNet(NULL);
+        // Empty the nodes_ table
+        while (!nodes_.empty())
+            nodes_.pop_back();
+        // Tell the owner it doesn't own this Net anymore
         owner_->remove(this);
     }
 
