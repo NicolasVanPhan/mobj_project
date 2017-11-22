@@ -28,7 +28,7 @@ namespace Netlist {
   {
     // Remove terminals
     while (!terms_.empty())
-        delete *terms_.begin();
+      delete *terms_.begin();
 
     // Tell the owner cell it has one less instance
     owner_->remove(this);
@@ -54,7 +54,7 @@ namespace Netlist {
     for (p = terms_.begin(); p != terms_.end(); p++)
     {
       if ((*p)->getName() == nameTerm)
-	return *p;
+        return *p;
     }
     return NULL;
   }
@@ -108,10 +108,10 @@ namespace Netlist {
 
   void  Instance::toXml( std::ostream& ostream)
   {
-      ostream << indent << "<instance name=\"" << name_
-              << "\" mastercell=\"" << masterCell_->getName()
-              << "\" x=\"" << position_.getX()
-              << "\" y=\"" << position_.getY()
-              << "\"/>" << std::endl;
+    ostream << indent << "<instance name=\"" << name_
+      << "\" mastercell=\"" << masterCell_->getName()
+      << "\" x=\"" << position_.getX()
+      << "\" y=\"" << position_.getY()
+      << "\"/>" << std::endl;
   }
 }

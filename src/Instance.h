@@ -11,44 +11,44 @@
 
 namespace Netlist {
 
-    // Forward declaration
-    class Cell;
-    class Term;
-    class Point;
-    class Net;
-    
-    class Instance {
-        public :
-            /* ---------------- Functions -------------- */
-            // CTOR and DTOR
-/* [X] */   Instance    ( Cell* owner, Cell* model, const std::string& );
-/* [X] */   ~Instance   ();
+  // Forward declaration
+  class Cell;
+  class Term;
+  class Point;
+  class Net;
 
-            // Accessors
-/* [X] */   const std::string&        getName       () const;
-/* [X] */   Cell*                     getMasterCell () const;
-/* [X] */   Cell*                     getCell       () const;
-/* [X] */   const std::vector<Term*>& getTerms      () const;
-/* [X] */   Term*                     getTerm       (const std::string&) const;
-/* [X] */   Point                     getPosition   () const;
-            
-            // Modificators
-/* [X] */   bool  connect       ( const std::string& name, Net* );
-/* [X] */   void  setPosition   ( const Point& );
-/* [X] */   void  setPosition   ( int x, int y );
-/* [X] */   void  add( Term* );
-/* [X] */   void  remove( Term* );
+  class Instance {
+    public :
+      /* ---------------- Functions -------------- */
+      // CTOR and DTOR
+      Instance    ( Cell* owner, Cell* model, const std::string& );
+      ~Instance   ();
 
-	    void toXml ( std::ostream& ostream );
+      // Accessors
+      const std::string&        getName       () const;
+      Cell*                     getMasterCell () const;
+      Cell*                     getCell       () const;
+      const std::vector<Term*>& getTerms      () const;
+      Term*                     getTerm       (const std::string&) const;
+      Point                     getPosition   () const;
 
-        private:
-            /* ---------------- Attributes ------------- */
-            Cell*               owner_;
-            Cell*               masterCell_;
-            std::string         name_;
-            std::vector<Term*>  terms_;
-            Point               position_;
-    };
+      // Modificators
+      bool  connect       ( const std::string& name, Net* );
+      void  setPosition   ( const Point& );
+      void  setPosition   ( int x, int y );
+      void  add( Term* );
+      void  remove( Term* );
+
+      void toXml ( std::ostream& ostream );
+
+    private:
+      /* ---------------- Attributes ------------- */
+      Cell*               owner_;
+      Cell*               masterCell_;
+      std::string         name_;
+      std::vector<Term*>  terms_;
+      Point               position_;
+  };
 }
 
 #endif
