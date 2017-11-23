@@ -4,6 +4,8 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <libxml/xmlreader.h>
 #include "Term.h"
 #include "Cell.h"
 #include "Node.h"
@@ -19,7 +21,10 @@ namespace Netlist {
 
   class Net {
     public :
-      /* --------- FUNCTIONS --------- */
+      /* --------- Class Functions --------- */
+      static bool             fromXml (Cell* cell, xmlTextReaderPtr reader);
+
+      /* --------- Instance Functions --------- */
       // CTOR and DTOR
       Net     ( Cell* cell, const std::string& name, Term::Type );
       ~Net    ( );

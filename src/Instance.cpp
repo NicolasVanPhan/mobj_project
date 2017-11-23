@@ -114,4 +114,9 @@ namespace Netlist {
       << "\" y=\"" << position_.getY()
       << "\"/>" << std::endl;
   }
+
+  bool             Instance::fromXml (Cell* cell, xmlTextReaderPtr reader)
+  {
+    return 1;
+  }
 }

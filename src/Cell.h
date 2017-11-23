@@ -4,8 +4,11 @@
 #define NETLIST_CELL_H
 
 #include <string>
+#include <fstream>
+#include <libxml/xmlreader.h>
 #include <vector>
 #include "Indentation.h"
+#include "XmlUtil.h"
 
 namespace Netlist {
 
@@ -18,6 +21,8 @@ namespace Netlist {
     public:
       static       std::vector<Cell*>&     getAllCells       ();
       static       Cell*                   find              ( const std::string& );
+      static       Cell*                   load              ( const std::string& cellName );
+      static       Cell*                   fromXml           ( xmlTextReaderPtr reader );
     public:                                                  
                                            Cell              ( const std::string& );
                                           ~Cell              ();
@@ -39,6 +44,7 @@ namespace Netlist {
                    unsigned int            newNetId          ();
 
 		   void			   toXml	     ( std::ostream& ostream);
+                   void                    save              ();
 
     private:
       static  std::vector<Cell*>      cells_;

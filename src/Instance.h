@@ -3,6 +3,8 @@
 #define NETLIST_INSTANCE_H
 
 #include <string>
+#include <fstream>
+#include <libxml/xmlreader.h>
 #include "Cell.h"
 #include "Term.h"
 #include "Point.h"
@@ -19,7 +21,10 @@ namespace Netlist {
 
   class Instance {
     public :
-      /* ---------------- Functions -------------- */
+      /* ---------------- Class Functions -------------- */
+      static bool            fromXml (Cell* cell, xmlTextReaderPtr reader);
+
+      /* ---------------- Instance Functions -------------- */
       // CTOR and DTOR
       Instance    ( Cell* owner, Cell* model, const std::string& );
       ~Instance   ();

@@ -3,9 +3,12 @@
 #define     NETLIST_TERM_H
 
 #include <string>
+#include <fstream>
+#include <libxml/xmlreader.h>
 #include "Node.h"
 #include "Point.h"
 #include "Indentation.h"
+#include "XmlUtil.h"
 
 namespace Netlist {
 
@@ -26,6 +29,7 @@ namespace Netlist {
       static std::string     toString ( Type );
       static std::string     toString ( Direction );
       static Direction       toDirection ( std::string );
+      static bool            fromXml (Cell* cell, xmlTextReaderPtr reader);
 
       /* ------------- Functions ---------------- */
       // CTOR and DTOR

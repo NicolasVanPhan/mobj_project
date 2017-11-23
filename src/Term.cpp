@@ -132,10 +132,15 @@ namespace Netlist {
     node_.setPosition(x,y);
   }
 
-  void	Term::toXml ( std::ostream& ostream)
+  void        Term::toXml ( std::ostream& ostream)
   {
     ostream << indent << "<term name=\"" << name_
       << "\" direction=\"" << toString(direction_)
       << "\"/>" << std::endl;
+  }
+
+  bool         Term::fromXml (Cell* cell, xmlTextReaderPtr reader)
+  {
+    return 1;
   }
 }
