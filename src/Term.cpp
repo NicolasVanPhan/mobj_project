@@ -139,8 +139,8 @@ namespace Netlist {
       << "\"/>" << std::endl;
   }
 
-  bool         Term::fromXml (Cell* cell, xmlTextReaderPtr reader)
+  Term*        Term::fromXml (Cell* cell, xmlTextReaderPtr reader)
   {
-    return 1;
+    return (Term*)1;
   }
 }

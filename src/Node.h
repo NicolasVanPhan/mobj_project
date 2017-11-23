@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <libxml/xmlreader.h>
 #include "Indentation.h"
 #include "Point.h"
 
@@ -18,6 +20,7 @@ namespace Netlist {
   class Node {
     public:
       static const size_t  noid;
+      static bool          fromXml(Net* net, xmlTextReaderPtr reader);
     public:
                       Node        ( Term*, size_t id=noid );
                      ~Node        ();

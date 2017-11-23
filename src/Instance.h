@@ -22,7 +22,7 @@ namespace Netlist {
   class Instance {
     public :
       /* ---------------- Class Functions -------------- */
-      static bool            fromXml (Cell* cell, xmlTextReaderPtr reader);
+      static Instance*            fromXml (Cell* cell, xmlTextReaderPtr reader);
 
       /* ---------------- Instance Functions -------------- */
       // CTOR and DTOR

@@ -43,4 +43,9 @@ namespace Netlist {
               << "\"/>" << std::endl;
   }
 
+  bool         Node::fromXml(Net* net, xmlTextReaderPtr reader)
+  {
+    return true;
+  }
+
 }  // Netlist namespace.

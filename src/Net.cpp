@@ -112,8 +112,8 @@ namespace Netlist {
     ostream << --indent << "</net>" << std::endl;
   }
 
-  bool             Net::fromXml (Cell* cell, xmlTextReaderPtr reader)
+  Net*             Net::fromXml (Cell* cell, xmlTextReaderPtr reader)
   {
-    return 1;
+    return (Net*)1;
   }
 }

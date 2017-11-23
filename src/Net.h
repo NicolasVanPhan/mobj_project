@@ -22,7 +22,7 @@ namespace Netlist {
   class Net {
     public :
       /* --------- Class Functions --------- */
-      static bool             fromXml (Cell* cell, xmlTextReaderPtr reader);
+      static Net*             fromXml (Cell* cell, xmlTextReaderPtr reader);
 
       /* --------- Instance Functions --------- */
       // CTOR and DTOR

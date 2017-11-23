@@ -29,7 +29,7 @@ namespace Netlist {
       static std::string     toString ( Type );
       static std::string     toString ( Direction );
       static Direction       toDirection ( std::string );
-      static bool            fromXml (Cell* cell, xmlTextReaderPtr reader);
+      static Term*           fromXml (Cell* cell, xmlTextReaderPtr reader);
 
       /* ------------- Functions ---------------- */
       // CTOR and DTOR
