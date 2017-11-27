@@ -117,6 +117,38 @@ namespace Netlist {
 
   Instance*             Instance::fromXml (Cell* cell, xmlTextReaderPtr reader)
   {
-    return (Instance*)1;
+    const xmlChar*    instTag;
+    const xmlChar*    nodeName;
+    int               nodeType;
+    std::string       name;
+    std::string       modelName;
+    Cell*             model;
+    int               x;
+    int               y;
+    Instance*         inst;
+
+    instTag = xmlTextReaderConstString( reader, (const xmlChar*)"instance" );
+    nodeName = xmlTextReaderConstLocalName(reader);
+    nodeType = xmlTextReaderNodeType(reader);
+
+    if (nodeName == instTag && nodeType == XML_READER_TYPE_ELEMENT)
+    {
+      name = xmlCharToString(xmlTextReaderGetAttribute(reader,
+            (const xmlChar*)"name"));
+      modelName = xmlCharToString(xmlTextReaderGetAttribute(reader,
+              (const xmlChar*)"mastercell"));
+      x = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
+              (const xmlChar*)"x")).c_str());
+      y = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
+              (const xmlChar*)"y")).c_str());
+      model = Cell::find(modelName);
+      if (model == NULL)
+        return NULL;
+      inst = new Instance(cell, model, name);
+      inst->setPosition(x, y);
+      return inst;
+    }
+    else
+      return NULL;
   }
 }
