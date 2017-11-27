@@ -136,11 +136,55 @@ namespace Netlist {
   {
     ostream << indent << "<term name=\"" << name_
       << "\" direction=\"" << toString(direction_)
+      << "\" x=\"" << node_.getPosition().getX()
+      << "\" y=\"" << node_.getPosition().getY()
       << "\"/>" << std::endl;
   }
 
   Term*        Term::fromXml (Cell* cell, xmlTextReaderPtr reader)
   {
-    return (Term*)1;
+    const xmlChar*    termTag;
+    const xmlChar*    nodeName;
+    int               nodeType;
+    std::string       name;
+    Direction         dir;
+    int               x;
+    int               y;
+    Term*             term;
+
+    termTag = xmlTextReaderConstString( reader, (const xmlChar*)"term" );
+    nodeName = xmlTextReaderConstLocalName(reader);
+    nodeType = xmlTextReaderNodeType(reader);
+
+    /* TEST BLOCK */
+    /* std::cout << "Tag : " << xmlCharToString(termTag) << std::endl;
+    std::cout << "Node name : " << xmlCharToString(termTag) << std::endl;
+    std::cout << "Test" << std::endl;
+    if (nodeName == termTag)
+      std::cout << "The node is 'term' indeed" << std::endl;
+    if (nodeType == XML_READER_TYPE_END_ELEMENT)
+      std::cout << "The type is 'standalone' indeed" << std::endl;
+    std::cout << "Type gotten : " << nodeType << std::endl;
+    std::cout << "element : " << XML_READER_TYPE_ELEMENT << std::endl;
+    std::cout << "end element : " << XML_READER_TYPE_END_ELEMENT << std::endl; */
+    /* END OF TEST BLOCK */
+
+    // if (line == "<term ... />")
+    if (nodeName == termTag && nodeType == XML_READER_TYPE_ELEMENT)
+    {
+      name = xmlCharToString(xmlTextReaderGetAttribute(reader,
+            (const xmlChar*)"name"));
+      dir = toDirection(xmlCharToString(xmlTextReaderGetAttribute(reader,
+              (const xmlChar*)"direction")));
+      x = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
+              (const xmlChar*)"x")).c_str());
+      y = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
+              (const xmlChar*)"y")).c_str());
+      term = new Term(cell, name, dir);
+      term->setPosition(x, y);
+      return term;
+    }
+    else
+      return NULL;
   }
 }

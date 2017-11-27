@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <libxml/xmlreader.h>
+#include <cstdlib>
 #include "Node.h"
 #include "Point.h"
 #include "Indentation.h"
