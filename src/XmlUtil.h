@@ -10,6 +10,7 @@ namespace Netlist {
 
 
   std::string  xmlCharToString    ( xmlChar* );
+  std::string  xmlCharToString    ( const xmlChar* );
   bool         xmlGetIntAttribute ( xmlTextReaderPtr, const std::string& attribute, int& value );
 
 
