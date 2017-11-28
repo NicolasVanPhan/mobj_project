@@ -38,8 +38,6 @@ namespace Netlist {
       if (term_->getType() == Term::Internal)
           ostream << "\" instance=\"" << term_->getInstance()->getName();
       ostream << "\" id=\"" << id_
-              << "\" x=\"" << position_.getX()
-              << "\" y=\"" << position_.getY()
               << "\"/>" << std::endl;
   }
 
@@ -52,6 +50,7 @@ namespace Netlist {
 
       std::string termName;
       std::string instanceName;
+      int	  id;
 
       nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
       nodeName = xmlTextReaderConstLocalName(reader);
@@ -59,8 +58,12 @@ namespace Netlist {
 
       if(nodeName == nodeTag && nodeType == XML_READER_TYPE_ELEMENT)
       {
-         instanceName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"instance"));
-         termName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"term"));
+         instanceName = xmlCharToString(xmlTextReaderGetAttribute(reader,
+			(const xmlChar*)"instance"));
+         termName = xmlCharToString(xmlTextReaderGetAttribute(reader,
+			(const xmlChar*)"term"));
+         id = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
+			(const xmlChar*)"id")).c_str());
          if (instanceName.empty()) //connection to a terminal cell
          {
              term = net->getCell()->getTerm(termName);
@@ -71,6 +74,7 @@ namespace Netlist {
              term = net->getCell()->getInstance(instanceName)->getTerm(termName);
              term->setNet(net);
          }
+	 term->getNode()->setId(id);
          return true;
       }
       return false;
