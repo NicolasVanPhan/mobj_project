@@ -114,29 +114,85 @@ namespace Netlist {
 
   Net*             Net::fromXml (Cell* cell, xmlTextReaderPtr reader)
   {
+      enum State { endNet };
       const xmlChar*    netTag;
       const xmlChar*    nodeName;
       int               nodeType;
       std::string       netName;
       Term::Type        netType;
       Net*              net;
+      State		state;
 
       netTag = xmlTextReaderConstString( reader, (const xmlChar*)"net" );
       nodeName = xmlTextReaderConstLocalName(reader);
       nodeType = xmlTextReaderNodeType(reader);
 
-      if (nodeName == netTag && nodeType == XML_READER_TYPE_END_ELEMENT)
+      // if (line == "<net>")
+      if (nodeName == netTag && nodeType == XML_READER_TYPE_ELEMENT)
       {
+          state = endNet;
+
+	  // Creation of the new Net
           netName = xmlCharToString(xmlTextReaderGetAttribute(reader,
 				  (const xmlChar*)"name"));
           netType = Term::toType(xmlCharToString(
 				  xmlTextReaderGetAttribute(reader,
 				 	(const xmlChar*)"type")));
           net = new Net(cell, netName, netType);
-	  return net;
-      }
+	
+	  std::cerr << "test" << std::endl;
 
-      else
-          return NULL;
+	  // Read all Node
+	  while (true) {
+            int status = xmlTextReaderRead(reader);
+	    // If reached EOF or current line is incorrect, exit failure
+            if (status != 1) {
+              std::cerr << "[ERROR] Net::fromXml(): "
+	           << "Unexpected termination of the XML parser."
+		   << std::endl;
+              break;
+            }
+
+	    switch ( xmlTextReaderNodeType(reader) ) {
+              case XML_READER_TYPE_COMMENT:
+              case XML_READER_TYPE_WHITESPACE:
+	      case XML_READER_TYPE_SIGNIFICANT_WHITESPACE:
+                continue;
+            }
+
+	      nodeName = xmlTextReaderConstLocalName(reader);
+	      nodeType = xmlTextReaderNodeType(reader);
+
+	      std::cerr << "nodeName: " << xmlCharToString(nodeName) << std::endl;
+	      std::cerr << "nodeType: " << nodeType << std::endl;
+
+              switch (state) {
+               case endNet:
+                  // if line == </net>, finish reading correctly (return true)
+		  if ((nodeName == netTag) and
+                      (xmlTextReaderNodeType(reader)
+                      == XML_READER_TYPE_END_ELEMENT)) { // if (line == </net>) 
+                    return net; // finished reading the file, successfully
+                  }
+                  // if line == <node />, add Node to the Net
+		  // if line is incorrect, break
+		  else {
+		    if (Node::fromXml(net, reader)) continue;
+		    else
+			std::cerr << "Ouille" << std::endl;
+		  }
+                  break;
+		default:
+		  break;
+              } // end of switch
+	      // if any error occured, return incorrectly (return false)
+              std::cerr << "[ERROR] Net::fromXml(): Unknown or misplaced tag <"
+                   << nodeName << "<"
+                   << "(line: " << xmlTextReaderGetParserLineNumber(reader)
+                   << ")." << std::endl;
+	      break;
+          }
+      } // end of while
+    return NULL; // reading ended in failure
   }
 }

@@ -57,7 +57,7 @@ namespace Netlist {
       nodeName = xmlTextReaderConstLocalName(reader);
       nodeType = xmlTextReaderNodeType(reader);
 
-      if(nodeName == nodeTag && nodeType == XML_READER_TYPE_END_ELEMENT)
+      if(nodeName == nodeTag && nodeType == XML_READER_TYPE_ELEMENT)
       {
          instanceName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"instance"));
          termName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"term"));
