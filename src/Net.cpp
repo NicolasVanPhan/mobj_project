@@ -114,6 +114,27 @@ namespace Netlist {
 
   Net*             Net::fromXml (Cell* cell, xmlTextReaderPtr reader)
   {
-    return (Net*)1;
+      const xmlChar*    netTag;
+      const xmlChar*    nodeName;
+      int               nodeType;
+      std::string       netName;
+      Term::Type        netType;
+      Net*              net;
+
+      netTag = xmlTextReaderConstString( reader, (const xmlChar*)"net" );
+      nodeName = xmlTextReaderConstLocalName(reader);
+      nodeType = xmlTextReaderNodeType(reader);
+
+      if (nodeName == termTag && nodeType == XML_READER_TYPE_END_ELEMENT)
+      {
+          netName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"name"));
+          netType = Term::toType(xmlTextReaderGetAttribute(reader, (const xmlchar*)"type"));
+          net = new Net(cell, netName, netType);
+      }
+
+      else
+          return NULL;
+
+      return ;
   }
 }
