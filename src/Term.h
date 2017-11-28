@@ -30,6 +30,7 @@ namespace Netlist {
       static std::string     toString ( Type );
       static std::string     toString ( Direction );
       static Direction       toDirection ( std::string );
+      static type	     toType(std::string);
       static Term*           fromXml (Cell* cell, xmlTextReaderPtr reader);
 
       /* ------------- Functions ---------------- */
