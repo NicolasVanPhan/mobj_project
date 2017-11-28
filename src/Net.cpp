@@ -125,16 +125,18 @@ namespace Netlist {
       nodeName = xmlTextReaderConstLocalName(reader);
       nodeType = xmlTextReaderNodeType(reader);
 
-      if (nodeName == termTag && nodeType == XML_READER_TYPE_END_ELEMENT)
+      if (nodeName == netTag && nodeType == XML_READER_TYPE_END_ELEMENT)
       {
-          netName = xmlCharToString(xmlTextReaderGetAttribute(reader, (const xmlChar*)"name"));
-          netType = Term::toType(xmlTextReaderGetAttribute(reader, (const xmlchar*)"type"));
+          netName = xmlCharToString(xmlTextReaderGetAttribute(reader,
+				  (const xmlChar*)"name"));
+          netType = Term::toType(xmlCharToString(
+				  xmlTextReaderGetAttribute(reader,
+				 	(const xmlChar*)"type")));
           net = new Net(cell, netName, netType);
+	  return net;
       }
 
       else
           return NULL;
-
-      return ;
   }
 }

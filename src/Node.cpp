@@ -45,8 +45,10 @@ namespace Netlist {
 
   bool         Node::fromXml(Net* net, xmlTextReaderPtr reader)
   {
-      Node*     node;
-      Term*     term;
+      Term*     	term;
+      const xmlChar*	nodeTag;
+      const xmlChar*	nodeName;
+      int		nodeType;
 
       std::string termName;
       std::string instanceName;
@@ -62,12 +64,12 @@ namespace Netlist {
          if (instanceName.empty()) //connection to a terminal cell
          {
              term = net->getCell()->getTerm(termName);
-             Term::setNet(net);
+             term->setNet(net);
          }
          else //connection to a terminal instance
          {
              term = net->getCell()->getInstance(instanceName)->getTerm(termName);
-             Term::setNet(net);
+             term->setNet(net);
          }
          return true;
       }
