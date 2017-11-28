@@ -41,43 +41,43 @@ namespace Netlist {
               << "\"/>" << std::endl;
   }
 
-  bool         Node::fromXml(Net* net, xmlTextReaderPtr reader)
-  {
-      Term*     	term;
-      const xmlChar*	nodeTag;
-      const xmlChar*	nodeName;
-      int		nodeType;
+	bool         Node::fromXml(Net* net, xmlTextReaderPtr reader)
+	{
+		Term*     	term;
+		const xmlChar*	nodeTag;
+		const xmlChar*	nodeName;
+		int		nodeType;
 
-      std::string termName;
-      std::string instanceName;
-      int	  id;
+		std::string termName;
+		std::string instanceName;
+		int	  id;
 
-      nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
-      nodeName = xmlTextReaderConstLocalName(reader);
-      nodeType = xmlTextReaderNodeType(reader);
+		nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
+		nodeName = xmlTextReaderConstLocalName(reader);
+		nodeType = xmlTextReaderNodeType(reader);
 
-      if(nodeName == nodeTag && nodeType == XML_READER_TYPE_ELEMENT)
-      {
-         instanceName = xmlCharToString(xmlTextReaderGetAttribute(reader,
-			(const xmlChar*)"instance"));
-         termName = xmlCharToString(xmlTextReaderGetAttribute(reader,
-			(const xmlChar*)"term"));
-         id = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
-			(const xmlChar*)"id")).c_str());
-         if (instanceName.empty()) //connection to a terminal cell
-         {
-             term = net->getCell()->getTerm(termName);
-             term->setNet(net);
-         }
-         else //connection to a terminal instance
-         {
-             term = net->getCell()->getInstance(instanceName)->getTerm(termName);
-             term->setNet(net);
-         }
-	 term->getNode()->setId(id);
-         return true;
-      }
-      return false;
-  }
+		if(nodeName == nodeTag && nodeType == XML_READER_TYPE_ELEMENT)
+		{
+			instanceName = xmlCharToString(xmlTextReaderGetAttribute(reader,
+						(const xmlChar*)"instance"));
+			termName = xmlCharToString(xmlTextReaderGetAttribute(reader,
+						(const xmlChar*)"term"));
+			id = atoi(xmlCharToString(xmlTextReaderGetAttribute(reader,
+							(const xmlChar*)"id")).c_str());
+			if (instanceName.empty()) //connection to a terminal cell
+			{
+				term = net->getCell()->getTerm(termName);
+				term->setNet(net);
+			}
+			else //connection to a terminal instance
+			{
+				term = net->getCell()->getInstance(instanceName)->getTerm(termName);
+				term->setNet(net);
+			}
+			term->getNode()->setId(id);
+			return true;
+		}
+		return false;
+	}
 
 }  // Netlist namespace.
