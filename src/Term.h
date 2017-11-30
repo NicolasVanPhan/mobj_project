@@ -68,7 +68,7 @@ namespace Netlist {
       Direction   direction_;
       Type        type_;
       Net*        net_;
-      Node        node_;
+      NodeTerm    node_;
   };
 
   inline bool               Term::isInternal   () const

@@ -23,6 +23,13 @@ find_package(LibXml2)
                                       Node.h
                                       Cell.h
                                       XmlUtil.h
+                                      Box.h
+                                      Line.h
+                                      Symbol.h
+                                      Shape.h
+                                      BoxShape.h
+                                      TermShape.h
+                                      Lineshape.h
                        )
 
                     set( cpps         Indentation.cpp
@@ -34,10 +41,17 @@ find_package(LibXml2)
                                       Cell.cpp
                                       Main.cpp
                                       XmlUtil.cpp
+                                      Box.cpp
+                                      Line.cpp
+                                      Symbol.cpp
+                                      Shape.cpp
+                                      BoxShape.cpp
+                                      TermShape.cpp
+                                      Lineshape.cpp
                        )
 
 # Make linking with LibXml2
-        add_executable ( tme6        ${cpps} )
-        target_link_libraries ( tme6 ${LIBXML2_LIBRARIES} )
-               install ( TARGETS      tme6        DESTINATION bin )
+        add_executable ( tme7        ${cpps} )
+        target_link_libraries ( tme7 ${LIBXML2_LIBRARIES} )
+               install ( TARGETS      tme7        DESTINATION bin )
                install ( FILES        ${includes}  DESTINATION include )
