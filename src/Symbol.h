@@ -38,7 +38,7 @@ namespace Netlist {
   };
 
 
-  inline const std::vector<Shape*>  Symbol::getShapes () const { return shapes_; }
+  inline const std::vector<Shape*>      getShapes () const { return shapes_; }
 
 
 }  // Netlist namespace.
