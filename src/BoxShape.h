@@ -14,6 +14,8 @@ namespace Netlist {
 
     public:
       /* ---------- Class function ---------- */
+      static  bool        fromXml        ( Symbol*, xmlTextReaderPtr );
+
       /* ---------- Instance function ---------- */
 
       // Constructors and Destructors
@@ -23,6 +25,7 @@ namespace Netlist {
 
       // Accessors
       Box                 getBoundingBox() const;
+      void                toXml          ( std::ostream& ) const;
 
       // Modificators
       

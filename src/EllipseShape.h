@@ -8,7 +8,7 @@
 
 namespace Netlist {
 
-  class LineShape : public Shape {
+  class EllipseShape : public Shape {
 
     // Forward declaration
 
@@ -19,8 +19,9 @@ namespace Netlist {
       /* ---------- Instance function ---------- */
 
       // Constructors and Destructors
-                          LineShape       ( Symbol* owner, int x1, int y1, int x2, int y2 );
-                          ~LineShape      ();
+                          EllipseShape       ( Symbol* owner, const Box& box );
+                          EllipseShape       ( Symbol* owner, int x1, int y1, int x2, int y2 );
+                          ~EllipseShape      ();
 
       // Accessors
       Box                 getBoundingBox() const;
@@ -30,10 +31,7 @@ namespace Netlist {
       
     private:
       /* ---------- Attributes ---------- */
-      int                 x1_;
-      int                 y1_;
-      int                 x2_;
-      int                 y2_;
+      Box                 box_;
   };
 }
 

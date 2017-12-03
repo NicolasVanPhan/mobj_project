@@ -6,8 +6,8 @@ namespace Netlist {
   LineShape::LineShape        ( Symbol* owner, int x1, int y1, int x2, int y2)
     :Shape(owner),
     x1_(x1),
-    x2_(x2),
     y1_(y1),
+    x2_(x2),
     y2_(y2),
   {
   }

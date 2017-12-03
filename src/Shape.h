@@ -21,7 +21,7 @@ namespace Netlist {
       virtual             ~Shape      ();
 
       // Accessors
-      inline Symbol*      getSymbol   () const;
+      inline  Symbol*     getSymbol   () const;
       virtual Box         getBoundingBox() const = 0;
 
       // Modificators
