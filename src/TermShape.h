@@ -2,15 +2,21 @@
 #ifndef NETLIST_BOXSHAPE_H
 #define NETLIST_BOXSHAPE_H
 
+#include "Shape.h"
 #include <string>
 #include <fstream>
+#include <vector>
 #include <libxml/xmlreader.h>
+#include "Symbol.h"
 
 namespace Netlist {
 
-  class TermShape : public Shape {
+  class Shape;
+  class Term;
+  class Box;
+  class Symbol;
 
-    // Forward declaration
+  class TermShape : public Shape {
 
     public:
       enum NameAlign { TopLeft=1, TopRight, BottomLeft, BottomRight };
@@ -21,7 +27,7 @@ namespace Netlist {
       /* ---------- Instance function ---------- */
 
       // Constructors and Destructors
-                          TermShape       ( Symbol* owner, std::string name, int x, int y );
+                          TermShape       ( Symbol* owner, std::string name, int x, int y, NameAlign align);
                           ~TermShape      ();
 
       // Accessors
@@ -30,24 +36,25 @@ namespace Netlist {
       inline  int         getX            () const;
       inline  int         getY            () const;
               void        toXml           ( std::ostream& ) const;
+      static  std::string alignToString   ( NameAlign );
 
       // Modificators
       
     private:
       /* ---------- Attributes ---------- */
       int                 x_;
-      int                 y;
+      int                 y_;
       Term*               term_;
       NameAlign           align_;
   };
 
-  inline  Term*       getTerm         () const
+  inline  Term*       TermShape::getTerm         () const
   { return term_; }
 
-  inline  int         getX            () const
+  inline  int         TermShape::getX            () const
   { return x_; }
 
-  inline  int         getY            () const
+  inline  int         TermShape::getY            () const
   { return y_; }
 }
 

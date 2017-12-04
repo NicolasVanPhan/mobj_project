@@ -24,8 +24,8 @@ namespace Netlist {
   Box                Symbol::getBoundingBox  () const
   {
     Box   bbox;
-    std::vector<Shape*>::iterator it;
-    for (it = shapes_.begin(); it != shapes_.end(); ++shapes_ ) {
+    std::vector<Shape*>::const_iterator it;
+    for (it = shapes_.begin(); it != shapes_.end(); it++ ) {
       bbox.merge((*it)->getBoundingBox());
     }
     return bbox;
@@ -36,10 +36,10 @@ namespace Netlist {
     // Which position should be returned ?
   }
 
-  TermShape*         Symbol::getTermShape    ( Term* term) const
+  const TermShape*         Symbol::getTermShape    ( Term* term) const
   {
     std::vector<Shape*>::const_iterator it;
-    TermShape*    tshape;
+    const TermShape*    tshape;
     for (it = shapes_.begin(); it != shapes_.end(); ++it) {
       tshape = dynamic_cast<TermShape*>(*it);
       // if the current Shape* is indeed a TermShape* and points to the given Term
@@ -62,7 +62,7 @@ namespace Netlist {
   {
   }
 
-  static Symbol*     Symbol::fromXml         ( Cell*, xmlTextReaderPtr )
+  Symbol*           Symbol::fromXml         ( Cell*, xmlTextReaderPtr )
   {
   }
 

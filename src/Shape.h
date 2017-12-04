@@ -4,9 +4,20 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 #include <libxml/xmlreader.h>
+#include "TermShape.h"
+#include "LineShape.h"
+#include "BoxShape.h"
+#include "ArcShape.h"
+#include "EllipseShape.h"
+#include "Shape.h"
 
 namespace Netlist {
+
+  class Box;
+
+  class Symbol;
 
   class Shape {
 
@@ -14,6 +25,8 @@ namespace Netlist {
 
     public:
       /* ---------- Class function ---------- */
+      static Shape*       fromXml ( Symbol*, xmlTextReaderPtr );
+
       /* ---------- Instance function ---------- */
 
       // Constructors and Destructors
@@ -23,15 +36,18 @@ namespace Netlist {
       // Accessors
       inline  Symbol*     getSymbol   () const;
       virtual Box         getBoundingBox() const = 0;
-
+      
       // Modificators
       //
+
+      virtual void toXml       ( std::ostream& ) const;  
+
     private:
       /* ---------- Attributes ---------- */
       Symbol*         owner_;
   };
 
-  inline Symbol*          getSymbol () const
+  inline Symbol*          Shape::getSymbol () const
   { return owner_; }
 }
 

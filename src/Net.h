@@ -35,8 +35,9 @@ namespace Netlist {
       unsigned int              getId         () const;
       Term::Type                getType       () const;
       const std::vector<Node*>& getNodes      () const;
+      Node*                     getNode       ( size_t id ) const;
       size_t                    getFreeNodeId () const;
-      inline const std::vector<line*>& getLines() const;
+      inline const std::vector<Line*>& getLines() const;
 
       // Modificators
       void add    ( Node* );
@@ -56,7 +57,7 @@ namespace Netlist {
       std::vector<Line*>  lines_;
   };
 
-  inline const std::vector<line*>& getLines() const
+  inline const std::vector<Line*>& Net::getLines() const
   { return lines_; }
 }
 

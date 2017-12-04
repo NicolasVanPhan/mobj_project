@@ -4,9 +4,13 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 #include <libxml/xmlreader.h>
 
 namespace Netlist {
+
+  class Shape;
+  class Symbol;
 
   class LineShape : public Shape {
 

@@ -29,7 +29,7 @@ find_package(LibXml2)
                                       Shape.h
                                       BoxShape.h
                                       TermShape.h
-                                      Lineshape.h
+                                      LineShape.h
                        )
 
                     set( cpps         Indentation.cpp
@@ -47,7 +47,7 @@ find_package(LibXml2)
                                       Shape.cpp
                                       BoxShape.cpp
                                       TermShape.cpp
-                                      Lineshape.cpp
+                                      LineShape.cpp
                        )
 
 # Make linking with LibXml2

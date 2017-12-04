@@ -16,10 +16,15 @@ namespace Netlist {
 
   Net::~Net    ( )
   {
+    NodeTerm* nterm;
+
     std::vector<Node*>::iterator inode;
     // Unplug Terms connected to this Net
-    for (inode = nodes_.begin(); inode != nodes_.end(); inode++)
-      (*inode)->getTerm()->setNet(NULL);
+    for (inode = nodes_.begin(); inode != nodes_.end(); inode++) {
+      nterm = dynamic_cast<NodeTerm*>(*inode);
+      if (nterm != NULL)
+        nterm->getTerm()->setNet(NULL);
+    }
     // Empty the nodes_ table
     while (!nodes_.empty())
       nodes_.pop_back();
@@ -53,6 +58,16 @@ namespace Netlist {
     return nodes_;
   }
 
+  Node*                               Net::getNode ( size_t id ) const
+  {
+    std::vector<Node*>::const_iterator it;
+    for (it = nodes_.begin(); it != nodes_.end(); it++) {
+      if ((*it)->getId() == id)
+        return *it;
+    }
+    return NULL;
+  }
+
   size_t                              Net::getFreeNodeId () const
   {
     size_t  i;
@@ -67,36 +82,65 @@ namespace Netlist {
   void                                Net::add    ( Node* node )
   {
     size_t  free_id;
+    NodeTerm*   nterm;
 
     // As in Spice, one can plug a net into a terminal only if
     // it's plugged to nothing
     free_id = getFreeNodeId();
-    if (node->getTerm()->getNet() == NULL)
+    nterm = dynamic_cast<NodeTerm*>(node);
+    if ( nterm != NULL ) // If the Node is a NodeTerm
+    {
+      if (nterm->getTerm()->getNet() == NULL)
+      {
+        if (free_id == nodes_.size())
+          nodes_.push_back(node);
+        else
+          nodes_[free_id] = node;
+      }
+      else
+      {
+        std::cerr << "[Error] The net "
+          << nterm->getTerm()->getNet()->getName()
+          << " is already connected to this node" << std::endl;
+      }
+    }
+    else // If the Node is a NodePoint
     {
       if (free_id == nodes_.size())
         nodes_.push_back(node);
       else
         nodes_[free_id] = node;
     }
-    else
-    {
-      std::cerr << "[Error] The net "
-        << node->getTerm()->getNet()->getName()
-        << " is already connected to this node" << std::endl;
-    }
   }
 
   bool                                Net::remove ( Node* node)
   {
     size_t i;
+    NodeTerm* nterm;
 
     for (i = 0;i < nodes_.size();i++)
     {
       if (nodes_[i] == node)
       {
         nodes_[i] = NULL;
-        node->getTerm()->setNet(NULL);
+        nterm = dynamic_cast<NodeTerm*>(node);
+        if (nterm)
+            nterm->getTerm()->setNet(NULL);
         return true;
+      }
+    }
+    return false;
+  }
+
+  bool  Net::remove ( Line* line )
+  {
+    if (line) {
+      for ( std::vector<Line*>::iterator il = lines_.begin()
+          ; il != lines_.end() ; ++il ) {
+        if (*il == line) {
+          lines_.erase( il );
+          return true;
+        }
       }
     }
     return false;
@@ -199,16 +243,4 @@ namespace Netlist {
   void  Net::add ( Line* line )
   { if (line) lines_.push_back( line ); }
 
-  bool  Net::remove ( Line* line )
-  {
-    if (line) {
-      for ( vector<Line*>::iterator il = lines_.begin(); il != lines_.end() ; ++il ) {
-        if (*il == line) {
-          lines_.erase( il );
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }

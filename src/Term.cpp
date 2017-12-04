@@ -53,8 +53,8 @@ namespace Netlist {
   {
       if (str == "Internal")
           return Internal;
-      else if (str == "External")
-	  return External;
+      else // str == "External"
+        return External;
   }
 
   Term::Term    ( Cell* cell, const std::string& name, Direction dir)
