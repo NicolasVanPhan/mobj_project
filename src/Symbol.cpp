@@ -1,5 +1,5 @@
 
-#include "Symbol.h"
+#include "Shapes.h"
 
 namespace Netlist {
 

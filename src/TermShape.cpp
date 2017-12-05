@@ -1,15 +1,14 @@
 
-#include "TermShape.h"
-#include "Box.h"
 #include "Term.h"
+#include "Shapes.h"
 
 namespace Netlist {
 
-  TermShape::TermShape      ( Symbol* owner, int x, int y, std::string name,
+  TermShape::TermShape      ( Symbol* owner, std::string name, int x, int y,
       NameAlign align )
     :Shape(owner), x_(x), y_(y), term_(NULL), align_(TopLeft)
   {
-    term_ = getCell()->getTerm(name);
+    term_ = owner->getCell()->getTerm(name);
   }
 
   TermShape::~TermShape     ()
@@ -17,16 +16,30 @@ namespace Netlist {
   }
 
 
-  static std::string  alignToString             ( NameAlign )
+  std::string  TermShape::alignToString             ( NameAlign align )
   {
-    if ( NameAlign == TopLeft )
+    if ( align == TopLeft )
       return "top_left";
-    if ( NameAlign == TopRight )
+    if ( align == TopRight )
       return "top_right";
-    if ( NameAlign == BottomLeft )
+    if ( align == BottomLeft )
       return "bottom_left";
     else
       return "bottom_right";
+  }
+
+  TermShape::NameAlign   TermShape::stringToAlign   ( std::string align)
+  {
+    if ( align == "top_left")
+      return TopLeft ;
+    if ( align == "top_right" )
+      return TopRight;
+    if ( align == "bottom_left")
+      return BottomLeft ;
+    if ( align == "bottom_right")
+      return BottomRight ;
+    else
+      return TopLeft;
   }
 
   Box                 TermShape::getBoundingBox() const
@@ -39,16 +52,16 @@ namespace Netlist {
      << "align=\"" << alignToString(align_) << "\"/>" << std::endl;
   }
   
-  static TermShape*   TermShape::fromXml(Symbol* owner, xmlTextReaderPtr reader)
+  TermShape*   TermShape::fromXml(Symbol* owner, xmlTextReaderPtr reader)
   {
     TermShape* tshape;
-    const xmlChar* termShapeTag;
-    const xmlChar* nodeName;
-    const xmlChar* nodeType;
-    int   x1;
-    int   y1;
-    std::string termName;
-    NameAlign   align;
+    const xmlChar*  termShapeTag;
+    const xmlChar*  nodeName;
+    int             nodeType;
+    int             x1;
+    int             y1;
+    std::string     termName;
+    NameAlign       align;
 
     // Reading the current xml line
     termShapeTag = xmlTextReaderConstString(reader, (const xmlChar*)"term");
@@ -59,16 +72,16 @@ namespace Netlist {
     tshape = NULL;
     if (nodeType == XML_READER_TYPE_ELEMENT and nodeName == termShapeTag)
     {
-      x1 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*)
+      x1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x1")).c_str());
-      x2 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*)
-      "x2")).c_str());
-      termName = xmlCharToString(xmlTextReaderGetAttibute( reader,
+      y1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
+      "y1")).c_str());
+      termName = xmlCharToString(xmlTextReaderGetAttribute( reader,
             (const xmlChar*)"name"));
-      align = stringToAlign(xmlCharToString(xmlTextReaderGetAttibute( reader,
+      align = stringToAlign(xmlCharToString(xmlTextReaderGetAttribute( reader,
               (const xmlChar*)"align" )));
       
-      tshape = new TermShape(owner, termName, x1, x2, align);
+      tshape = new TermShape(owner, termName, x1, y1, align);
     }
     return tshape;
   }

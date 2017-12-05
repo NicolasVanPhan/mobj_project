@@ -30,6 +30,8 @@ find_package(LibXml2)
                                       BoxShape.h
                                       TermShape.h
                                       LineShape.h
+                                      EllipseShape.h
+                                      ArcShape.h
                        )
 
                     set( cpps         Indentation.cpp
@@ -48,6 +50,8 @@ find_package(LibXml2)
                                       BoxShape.cpp
                                       TermShape.cpp
                                       LineShape.cpp
+                                      EllipseShape.cpp
+                                      ArcShape.cpp
                        )
 
 # Make linking with LibXml2

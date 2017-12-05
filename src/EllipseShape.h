@@ -1,11 +1,12 @@
 
-#ifndef NETLIST_BOXSHAPE_H
-#define NETLIST_BOXSHAPE_H
+#ifndef NETLIST_ELLIPSESHAPE_H
+#define NETLIST_ELLIPSESHAPE_H
 
 #include <string>
 #include <fstream>
 #include <vector>
 #include <libxml/xmlreader.h>
+#include "Shape.h"
 
 namespace Netlist {
 
@@ -18,7 +19,7 @@ namespace Netlist {
 
     public:
       /* ---------- Class function ---------- */
-      static  bool        fromXml        ( Symbol*, xmlTextReaderPtr );
+      static  EllipseShape*        fromXml        ( Symbol*, xmlTextReaderPtr );
 
       /* ---------- Instance function ---------- */
 

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include "Indentation.h"
-#include "Symbol.h"       // TME7
+#include "Symbol.h"
 
 namespace Netlist {
 

@@ -1,5 +1,5 @@
 
-#include "LineShape.h"
+#include "Shapes.h"
 
 namespace Netlist {
 
@@ -8,7 +8,7 @@ namespace Netlist {
     x1_(x1),
     y1_(y1),
     x2_(x2),
-    y2_(y2),
+    y2_(y2)
   {
   }
 
@@ -17,10 +17,13 @@ namespace Netlist {
 
   Box     LineShape::getBoundingBox () const
   {
-    return Box(std::min(x1, x2), std::min(y1, y2), std::max(x1, x2), std::max(y1, y2));
+    return Box(std::min(x1_, x2_),
+        std::min(y1_, y2_),
+        std::max(x1_, x2_),
+        std::max(y1_, y2_));
   }
 
-  void    toXml               ( std::ostream& stream) const
+  void    LineShape::toXml               ( std::ostream& stream) const
   {
      stream <<"<line x1=\""<<x1_<<"\" "<<"y1=\""<<y1_<<"\""
     <<"x2=\""<<x2_<<"\" "<<"y2=\""<<y2_<<"\" "<<std::endl;   
@@ -32,7 +35,7 @@ namespace Netlist {
     LineShape* lshape;
     const xmlChar* lineShapeTag;
     const xmlChar* nodeName;
-    const xmlChar* nodeType;
+    int            nodeType;
     int   x1;
     int   x2;
     int   y1;
@@ -47,13 +50,13 @@ namespace Netlist {
     lshape = NULL;
     if (nodeType == XML_READER_TYPE_ELEMENT and nodeName == lineShapeTag)
     {
-      x1 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*)
+      x1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x1")).c_str());
-      x2 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*)
+      x2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x2")).c_str());
-      y1 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*
+      y1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y1")).c_str());
-      y2 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*
+      y2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y2")).c_str());
       
       lshape = new LineShape(owner, x1, x2, y1, y2);

@@ -1,5 +1,5 @@
 
-#include "Shape.h"
+#include "Shapes.h"
 
 namespace Netlist {
 
@@ -43,8 +43,8 @@ namespace Netlist {
       shape = TermShape::fromXml( owner, reader );
 
     if (shape == NULL)
-      cerr << "[ERROR] Unknown or misplaced tag <" << nodeName << "> (line:"
-        << xmlTextReaderGetParserLineNumber(reader) << ")." << endl;
+      std::cerr << "[ERROR] Unknown or misplaced tag <" << nodeName << "> (line:"
+        << xmlTextReaderGetParserLineNumber(reader) << ")." << std::endl;
 
     return shape;
   }

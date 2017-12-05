@@ -6,18 +6,22 @@
 #include <fstream>
 #include <vector>
 #include <libxml/xmlreader.h>
-#include "TermShape.h"
-#include "LineShape.h"
-#include "BoxShape.h"
-#include "ArcShape.h"
-#include "EllipseShape.h"
-#include "Shape.h"
+//#include "TermShape.h"
+//#include "LineShape.h"
+//#include "BoxShape.h"
+//#include "ArcShape.h"
+//#include "EllipseShape.h"
+#include "Cell.h"
 
 namespace Netlist {
 
   class Box;
 
   class Symbol;
+  class BoxShape;
+  class EllipseShape;
+  class ArcShape;
+  class LineShape;
 
   class Shape {
 
@@ -40,7 +44,7 @@ namespace Netlist {
       // Modificators
       //
 
-      virtual void toXml       ( std::ostream& ) const;  
+      virtual void toXml       ( std::ostream& ) const = 0;
 
     private:
       /* ---------- Attributes ---------- */

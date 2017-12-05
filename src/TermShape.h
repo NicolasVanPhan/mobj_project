@@ -1,20 +1,18 @@
 
-#ifndef NETLIST_BOXSHAPE_H
-#define NETLIST_BOXSHAPE_H
+#ifndef NETLIST_TERMSHAPE_H
+#define NETLIST_TERMSHAPE_H
 
-#include "Shape.h"
 #include <string>
 #include <fstream>
 #include <vector>
 #include <libxml/xmlreader.h>
-#include "Symbol.h"
+#include "Shape.h"
+#include "XmlUtil.h"
 
 namespace Netlist {
 
-  class Shape;
   class Term;
   class Box;
-  class Symbol;
 
   class TermShape : public Shape {
 
@@ -22,7 +20,7 @@ namespace Netlist {
       enum NameAlign { TopLeft=1, TopRight, BottomLeft, BottomRight };
 
       /* ---------- Class function ---------- */
-      static  bool        fromXml         ( Symbol*, xmlTextReaderPtr );
+      static  TermShape*        fromXml         ( Symbol*, xmlTextReaderPtr );
 
       /* ---------- Instance function ---------- */
 
@@ -37,6 +35,7 @@ namespace Netlist {
       inline  int         getY            () const;
               void        toXml           ( std::ostream& ) const;
       static  std::string alignToString   ( NameAlign );
+      static  NameAlign   stringToAlign   ( std::string );
 
       // Modificators
       

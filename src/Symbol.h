@@ -6,13 +6,7 @@
 #include  <libxml/xmlreader.h>
 #include  <string>
 #include  <vector>
-#include  "Box.h"
-#include "TermShape.h"
-#include "BoxShape.h"
-#include "LineShape.h"
-#include "ArcShape.h"
-#include "EllipseShape.h"
-#include  "Shape.h"
+#include "Box.h"
 
 namespace Netlist {
 
@@ -21,10 +15,10 @@ namespace Netlist {
 
   class Shape;
   class TermShape;
-  class LineShape;
-  class BoxShape;
-  class EllipseShape;
-  class ArcShape;
+  //class LineShape;
+  //class BoxShape;
+  //class EllipseShape;
+  //class ArcShape;
 
   class Symbol {
     public:

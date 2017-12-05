@@ -1,5 +1,5 @@
 
-#include "EllipseShape.h"
+#include "Shapes.h"
 
 namespace Netlist {
 
@@ -14,15 +14,13 @@ namespace Netlist {
   EllipseShape::~EllipseShape      ( ) 
   { }
 
-  Box     Ellipseshape::getBoundingBox () const
+  Box     EllipseShape::getBoundingBox () const
   { return box_; }
 
-  void    toXml ( std::ostream& stream )
+  void    EllipseShape::toXml ( std::ostream& stream ) const
   {
-    Box boxCopy = getBoundingBox ();
-    
-    stream <<"<ellipse x1=\""<<boxCopy.x1_<<"\" "<<"y1=\""<<boxCopy.y1_<<"\""
-    <<"x2=\""<<boxCopy.x2_<<"\" "<<"y2=\""<<boxCopy.y2_<<"\" "<<std::endl;   
+    stream <<"<ellipse x1=\""<< box_.getX1() <<"\" "<<"y1=\""<< box_.getY1() <<"\""
+    <<"x2=\""<< box_.getX2() <<"\" "<<"y2=\""<< box_.getY2() <<"\" "<<std::endl;   
   }
 
   EllipseShape*   EllipseShape::fromXml (Symbol* owner, xmlTextReaderPtr reader)
@@ -30,7 +28,7 @@ namespace Netlist {
     EllipseShape* eshape;
     const xmlChar* ellipseShapeTag;
     const xmlChar* nodeName;
-    const xmlChar* nodeType;
+    int            nodeType;
     int   x1;
     int   x2;
     int   y1;
@@ -45,13 +43,13 @@ namespace Netlist {
     eshape = NULL;
     if (nodeType == XML_READER_TYPE_ELEMENT and nodeName == ellipseShapeTag)
     {
-      x1 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*)
+      x1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x1")).c_str());
-      x2 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*)
+      x2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x2")).c_str());
-      y1 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*
+      y1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y1")).c_str());
-      y2 = atoi(xmlCharToString(xmlTextReaderGetAttibute( reader, (const xmlChar*
+      y2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y2")).c_str());
       
       eshape = new EllipseShape(owner, x1, x2, y1, y2);

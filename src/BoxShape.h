@@ -6,6 +6,8 @@
 #include <fstream>
 #include <vector>
 #include <libxml/xmlreader.h>
+#include "Shape.h"
+#include "XmlUtil.h"
 
 namespace Netlist {
 
@@ -18,7 +20,7 @@ namespace Netlist {
 
     public:
       /* ---------- Class function ---------- */
-      static  bool        fromXml        ( Symbol*, xmlTextReaderPtr );
+      static  BoxShape*        fromXml        ( Symbol*, xmlTextReaderPtr );
 
       /* ---------- Instance function ---------- */
 
