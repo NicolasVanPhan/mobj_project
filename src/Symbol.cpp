@@ -31,9 +31,18 @@ namespace Netlist {
     return bbox;
   }
 
-  Point              Symbol::getTermPosition ( Term* ) const
+  Point              Symbol::getTermPosition ( Term* term ) const
   {
-    // Which position should be returned ?
+    int x;
+    int y;
+    const TermShape* tshape;
+    tshape = getTermShape(term);
+    if (tshape != NULL)
+    {
+      x = tshape->getX();
+      y = tshape->getY();
+      return Point(x,y);      
+    }
   }
 
   const TermShape*         Symbol::getTermShape    ( Term* term) const
@@ -56,6 +65,13 @@ namespace Netlist {
 
   void               Symbol::remove          ( Shape* shape )
   {
+    std::vector<Shape*>::iterator it;
+    for (it = shapes_.begin(); it != shapes_.end(); it++) {
+      if (*it == shape) {
+        shapes_.erase(it);
+        return ;
+      }
+    }
   }
 
   void               Symbol::toXml           ( std::ostream& stream) const
