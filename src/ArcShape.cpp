@@ -7,9 +7,9 @@ namespace Netlist {
     :Shape(owner), box_(box), start_(start), span_(span)
   { }
 
-  ArcShape::ArcShape      ( Symbol* owner, int x1, int x2, int y1, int y2,
+  ArcShape::ArcShape      ( Symbol* owner, int x1, int y1, int x2, int y2,
       int start, int span)
-    :Shape(owner), box_(x1, x2, y1, y2), start_(start), span_(span)
+    :Shape(owner), box_(x1, y1, x2, y2), start_(start), span_(span)
   { }
 
   ArcShape::~ArcShape      ( ) 
@@ -20,9 +20,13 @@ namespace Netlist {
 
   void    ArcShape::toXml ( std::ostream& stream ) const
   {
-    stream <<"<arc x1=\""<< box_.getX1() <<"\" "<<"y1=\""<< box_.getY1() <<"\""
-    <<"x2=\""<< box_.getX2() <<"\" "<<"y2=\""<< box_.getY2() <<"\" "
-    <<"start=\""<<start_<<"\" "<<"span=\""<<span_<<"\"/>"<<std::endl;   
+    stream << indent
+      << "<arc x1=\""<< box_.getX1() << "\" "
+      << "y1=\"" << box_.getY1() << "\" "
+      << "x2=\"" << box_.getX2() << "\" "
+      << "y2=\"" << box_.getY2() << "\" "
+      << "start=\"" << start_ << "\" "
+      << "span=\"" << span_ << "\"/>" << std::endl;   
   }
 
   ArcShape*   ArcShape::fromXml (Symbol* owner, xmlTextReaderPtr reader)
@@ -60,7 +64,7 @@ namespace Netlist {
       span = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader,
       (const xmlChar*)"span")).c_str());
 
-      ashape = new ArcShape(owner, x1, x2, y1, y2, start, span);
+      ashape = new ArcShape(owner, x1, y1, x2, y2, start, span);
     }
     return ashape;
   }

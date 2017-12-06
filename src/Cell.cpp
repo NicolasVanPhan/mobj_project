@@ -235,16 +235,16 @@ namespace Netlist {
   Cell* Cell::fromXml ( xmlTextReaderPtr reader )
   {
     enum  State { Init           = 0
-                , BeginCell
-                , BeginTerms
-                , EndTerms
-                , BeginInstances
-                , EndInstances
-                , BeginNets
-                , EndNets
-                , BeginSymbol
-                , EndCell
-                , ParseError };
+                , BeginCell      = 1
+                , BeginTerms     = 2
+                , EndTerms       = 3
+                , BeginInstances = 4
+                , EndInstances   = 5
+                , BeginNets      = 6
+                , EndNets        = 7
+                , BeginSymbol    = 8
+                , EndCell        = 9
+                , ParseError     = 10};
 
     const xmlChar* cellTag      = xmlTextReaderConstString( reader, (const xmlChar*)"cell" );
     const xmlChar* netsTag      = xmlTextReaderConstString( reader, (const xmlChar*)"nets" );
@@ -345,6 +345,7 @@ namespace Netlist {
           break;
       }
 
+      cerr << "State is " << state << endl;
       cerr << "[ERROR] Cell::fromXml(): Unknown or misplaced tag <" << nodeName
            << "> (line:" << xmlTextReaderGetParserLineNumber(reader) << ")." << endl;
       break;

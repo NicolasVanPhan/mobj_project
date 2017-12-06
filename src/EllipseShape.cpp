@@ -7,8 +7,8 @@ namespace Netlist {
     :Shape(owner), box_(box)
   { }
 
-  EllipseShape::EllipseShape      ( Symbol* owner, int x1, int x2, int y1, int y2 )
-    :Shape(owner), box_(x1, x2, y1, y2)
+  EllipseShape::EllipseShape      ( Symbol* owner, int x1, int y1, int x2, int y2 )
+    :Shape(owner), box_(x1, y1, x2, y2)
   { }
 
   EllipseShape::~EllipseShape      ( ) 
@@ -19,8 +19,11 @@ namespace Netlist {
 
   void    EllipseShape::toXml ( std::ostream& stream ) const
   {
-    stream <<"<ellipse x1=\""<< box_.getX1() <<"\" "<<"y1=\""<< box_.getY1() <<"\""
-    <<"x2=\""<< box_.getX2() <<"\" "<<"y2=\""<< box_.getY2() <<"\" "<<std::endl;   
+    stream << indent
+      << "<ellipse x1=\"" << box_.getX1() << "\" "
+      << "y1=\"" << box_.getY1() << "\" "
+      << "x2=\"" << box_.getX2() << "\" "
+      << "y2=\"" << box_.getY2() << "\" "<< std::endl;   
   }
 
   EllipseShape*   EllipseShape::fromXml (Symbol* owner, xmlTextReaderPtr reader)
@@ -30,8 +33,8 @@ namespace Netlist {
     const xmlChar* nodeName;
     int            nodeType;
     int   x1;
-    int   x2;
     int   y1;
+    int   x2;
     int   y2;
 
     // Reading the current xml line
@@ -45,14 +48,14 @@ namespace Netlist {
     {
       x1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x1")).c_str());
-      x2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
-      "x2")).c_str());
       y1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y1")).c_str());
+      x2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
+      "x2")).c_str());
       y2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y2")).c_str());
       
-      eshape = new EllipseShape(owner, x1, x2, y1, y2);
+      eshape = new EllipseShape(owner, x1, y1, x2, y2);
     }
     return eshape;
   }

@@ -9,6 +9,7 @@
 #include "Term.h"
 #include "Cell.h"
 #include "Node.h"
+#include "Line.h"
 #include "Instance.h"
 #include "Indentation.h"
 

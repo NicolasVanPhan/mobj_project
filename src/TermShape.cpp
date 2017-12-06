@@ -6,7 +6,7 @@ namespace Netlist {
 
   TermShape::TermShape      ( Symbol* owner, std::string name, int x, int y,
       NameAlign align )
-    :Shape(owner), x_(x), y_(y), term_(NULL), align_(TopLeft)
+    :Shape(owner), x_(x), y_(y), term_(NULL), align_(align)
   {
     term_ = owner->getCell()->getTerm(name);
   }
@@ -28,7 +28,7 @@ namespace Netlist {
       return "bottom_right";
   }
 
-  TermShape::NameAlign   TermShape::stringToAlign   ( std::string align)
+  TermShape::NameAlign   TermShape::stringToAlign   ( std::string align )
   {
     if ( align == "top_left")
       return TopLeft ;
@@ -39,7 +39,7 @@ namespace Netlist {
     if ( align == "bottom_right")
       return BottomRight ;
     else
-      return TopLeft;
+      return BottomRight;
   }
 
   Box                 TermShape::getBoundingBox() const
@@ -47,9 +47,11 @@ namespace Netlist {
 
   void                TermShape::toXml          ( std::ostream& stream) const
   {
-    stream << "<term name=\"" << term_->getName() << "\" "
-     << "x1=\"" << x_ << "\" " << "y1=\"" << y_ << "\" "
-     << "align=\"" << alignToString(align_) << "\"/>" << std::endl;
+    stream << indent
+      << "<term name=\"" << term_->getName() << "\" "
+      << "x1=\"" << x_ << "\" "
+      << "y1=\"" << y_ << "\" "
+      << "align=\"" << alignToString(align_) << "\" />" << std::endl;
   }
   
   TermShape*   TermShape::fromXml(Symbol* owner, xmlTextReaderPtr reader)

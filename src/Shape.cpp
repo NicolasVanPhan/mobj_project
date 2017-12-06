@@ -43,7 +43,7 @@ namespace Netlist {
       shape = TermShape::fromXml( owner, reader );
 
     if (shape == NULL)
-      std::cerr << "[ERROR] Unknown or misplaced tag <" << nodeName << "> (line:"
+      std::cerr << "[ERROR] SHAPES : Unknown or misplaced tag <" << nodeName << "> (line:"
         << xmlTextReaderGetParserLineNumber(reader) << ")." << std::endl;
 
     return shape;

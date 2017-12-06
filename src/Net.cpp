@@ -153,6 +153,8 @@ namespace Netlist {
       << "\">" << std::endl;
     for (std::vector<Node*>::iterator p = nodes_.begin(); p != nodes_.end(); p++)
       (*p)->toXml(ostream);
+    for (std::vector<Line*>::iterator p = lines_.begin(); p != lines_.end(); p++)
+      (*p)->toXml(ostream);
     ostream << --indent << "</net>" << std::endl;
   }
 
@@ -160,6 +162,8 @@ namespace Netlist {
   {
     enum State { endNet };
     const xmlChar*    netTag;
+    const xmlChar*    nodeTag;
+    const xmlChar*    lineTag;
     const xmlChar*    nodeName;
     int               nodeType;
     std::string       netName;
@@ -168,6 +172,8 @@ namespace Netlist {
     State		state;
 
     netTag = xmlTextReaderConstString( reader, (const xmlChar*)"net" );
+    nodeTag = xmlTextReaderConstString( reader, (const xmlChar*)"node" );
+    lineTag = xmlTextReaderConstString( reader, (const xmlChar*)"line" );
     nodeName = xmlTextReaderConstLocalName(reader);
     nodeType = xmlTextReaderNodeType(reader);
 
@@ -218,13 +224,21 @@ namespace Netlist {
                  == XML_READER_TYPE_END_ELEMENT)) { // if (line == </net>) 
               return net; // finished reading the file, successfully
             }
-            // if line == <node />, add Node to the Net
-            // if line is incorrect, break
-            else {
+            // if line == <node />
+            else if ((nodeName == nodeTag) and
+                (xmlTextReaderNodeType(reader) == XML_READER_TYPE_ELEMENT)) {
               if (Node::fromXml(net, reader)) continue;
-              else
-                std::cerr << "Ouille" << std::endl;
             }
+            // if line == <line />
+            else if ((nodeName == lineTag) and
+                (xmlTextReaderNodeType(reader) == XML_READER_TYPE_ELEMENT)) {
+              if (Line::fromXml(net, reader)) continue;
+              else
+                std::cerr << "Line error" << std::endl;
+            }
+            else
+              std::cerr << "No tag" << std::endl;
+            // if line is incorrect, break
             break;
           default:
             break;

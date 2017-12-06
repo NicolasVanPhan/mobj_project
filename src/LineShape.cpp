@@ -25,8 +25,11 @@ namespace Netlist {
 
   void    LineShape::toXml               ( std::ostream& stream) const
   {
-     stream <<"<line x1=\""<<x1_<<"\" "<<"y1=\""<<y1_<<"\""
-    <<"x2=\""<<x2_<<"\" "<<"y2=\""<<y2_<<"\" "<<std::endl;   
+     stream << indent
+       << "<line x1=\"" << x1_ << "\" "
+       << "y1=\"" << y1_ << "\" "
+       << "x2=\"" << x2_ << "\" "
+       << "y2=\"" << y2_ << "\" />" <<std::endl;   
 
   }
 
@@ -37,8 +40,8 @@ namespace Netlist {
     const xmlChar* nodeName;
     int            nodeType;
     int   x1;
-    int   x2;
     int   y1;
+    int   x2;
     int   y2;
 
     // Reading the current xml line
@@ -52,14 +55,14 @@ namespace Netlist {
     {
       x1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "x1")).c_str());
-      x2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
-      "x2")).c_str());
       y1 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y1")).c_str());
+      x2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
+      "x2")).c_str());
       y2 = atoi(xmlCharToString(xmlTextReaderGetAttribute( reader, (const xmlChar*)
       "y2")).c_str());
       
-      lshape = new LineShape(owner, x1, x2, y1, y2);
+      lshape = new LineShape(owner, x1, y1, x2, y2);
     }
     return lshape;
   }
