@@ -3,6 +3,7 @@
 #include "Cell.h"
 #include "CellWidget.h"
 #include "SaveCellDialog.h"
+#include "OpenCellDialog.h"
 
 namespace Netlist {
 
@@ -17,6 +18,7 @@ namespace Netlist {
     cellWidget_ = new CellWidget();
     // "Save Cell" popup that appears when user saves a cell
     saveCellDialog_ = new SaveCellDialog(this);
+    openCellDialog_ = new OpenCellDialog(this);
 
     setCentralWidget(cellWidget_);
 
@@ -29,6 +31,13 @@ namespace Netlist {
     action->setVisible(true);
     fileMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(saveCell()));  // Event handling
+
+    action = new QAction("&Open", this);
+    action->setStatusTip("Open from disk");
+    action->setShortcut(QKeySequence("CTRL+O"));
+    action->setVisible(true);
+    fileMenu->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(openCell()));  // Event handling
 
     action = new QAction("&Quit", this);
     action->setStatusTip("Exit the Netlist Viewer");
@@ -52,6 +61,22 @@ namespace Netlist {
     if (saveCellDialog_->run(cellName)) {
       cell->setName(cellName.toStdString());
       cell->save(cellName.toStdString());
+    }
+  }
+
+  void        CellViewer::openCell ( )
+  {
+    QString cellName;
+    Cell*   newcell;
+
+    if (openCellDialog_->run(cellName)) {
+      newcell = Cell::find(cellName.toStdString());
+      // If the specified cell has not already been loaded, load it 
+      if (newcell == NULL)
+        newcell = Cell::load(cellName.toStdString()); 
+        // If the cell has been successfully loaded (or was already loaded), set it
+      if (newcell != NULL)
+        setCell(newcell);
     }
   }
 

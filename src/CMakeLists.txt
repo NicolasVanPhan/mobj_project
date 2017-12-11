@@ -37,6 +37,7 @@
                        )
 
                     set( mocIncludes  SaveCellDialog.h
+                                      OpenCellDialog.h
                                       CellWidget.h
                                       CellViewer.h
                        )
@@ -59,6 +60,7 @@
                                       Symbol.cpp
                                       Cell.cpp
                                       SaveCellDialog.cpp
+                                      OpenCellDialog.cpp
                                       CellWidget.cpp
                                       CellViewer.cpp
                                       Main.cpp
