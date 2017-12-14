@@ -74,6 +74,7 @@ namespace Netlist {
       // If the specified cell has not already been loaded, load it 
       if (newcell == NULL)
         newcell = Cell::load(cellName.toStdString()); 
+        // TODO : Add a "emit cellloaded here for sync with CellsLib"
         // If the cell has been successfully loaded (or was already loaded), set it
       if (newcell != NULL)
         setCell(newcell);
