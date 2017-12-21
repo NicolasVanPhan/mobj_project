@@ -138,9 +138,6 @@ namespace Netlist {
         nodeName = xmlTextReaderConstLocalName(reader);
         nodeType = xmlTextReaderNodeType(reader);
 
-        std::cerr << "nodeName: " << xmlCharToString(nodeName) << std::endl;
-        std::cerr << "nodeType: " << nodeType << std::endl;
-
         switch (state) {
           case endSymbol:
             // if line == </symbol>, finish reading correctly (return true)

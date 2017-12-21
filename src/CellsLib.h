@@ -28,4 +28,7 @@ namespace Netlist {
     QTableView*   view_;
     QPushButton*   load_;
   };
+
+  inline CellsModel*  CellsLib::getBaseModel ( ) const
+  { return baseModel_; }
 }

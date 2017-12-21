@@ -190,8 +190,6 @@ namespace Netlist {
               (const xmlChar*)"type")));
       net = new Net(cell, netName, netType);
 
-      std::cerr << "test" << std::endl;
-
       // Read all Node
       while (true) {
         int status = xmlTextReaderRead(reader);
@@ -212,9 +210,6 @@ namespace Netlist {
 
         nodeName = xmlTextReaderConstLocalName(reader);
         nodeType = xmlTextReaderNodeType(reader);
-
-        std::cerr << "nodeName: " << xmlCharToString(nodeName) << std::endl;
-        std::cerr << "nodeType: " << nodeType << std::endl;
 
         switch (state) {
           case endNet:

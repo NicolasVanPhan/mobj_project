@@ -37,6 +37,9 @@ namespace Netlist {
       void            showInstancesWidget ( );
       void            showCellsLib        ( );
 
+    signals :
+    void            cellLoaded    ( );
+
     private :
     CellWidget*       cellWidget_;
     SaveCellDialog*   saveCellDialog_;

@@ -63,6 +63,8 @@ namespace Netlist {
     action->setVisible(true);
     fileMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(close()));  // Event handling
+
+    connect(this, SIGNAL(cellLoaded()), cellsLib_->getBaseModel(), SLOT(updateDatas()));
   }
 
   CellViewer::~CellViewer ( )
@@ -90,9 +92,10 @@ namespace Netlist {
     if (openCellDialog_->run(cellName)) {
       newcell = Cell::find(cellName.toStdString());
       // If the specified cell has not already been loaded, load it 
-      if (newcell == NULL)
+      if (newcell == NULL) {
         newcell = Cell::load(cellName.toStdString()); 
-        // TODO : Add a "emit cellloaded here for sync with CellsLib"
+        emit cellLoaded();
+      } 
         // If the cell has been successfully loaded (or was already loaded), set it
       if (newcell != NULL)
         setCell(newcell);
@@ -117,5 +120,4 @@ namespace Netlist {
 
   Cell*       CellViewer::getCell ( ) const
   { return cellWidget_->getCell(); }
-
 }

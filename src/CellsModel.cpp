@@ -1,5 +1,6 @@
 
 #include "CellsModel.h"
+#include <QAbstractItemModel>
 
 namespace Netlist {
 
@@ -45,6 +46,13 @@ namespace Netlist {
   {
     if (row < 0 or row >= rowCount())   return NULL; 
     return Cell::getAllCells()[row];
+  }
+
+  void      CellsModel::updateDatas     ( )
+  {
+    std::cerr << "update data..." << std::endl;
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
   }
 
 }

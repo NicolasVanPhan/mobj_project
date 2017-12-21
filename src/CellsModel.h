@@ -19,5 +19,8 @@ namespace Netlist {
 
     // custom functions
     Cell*     getCell             ( int row );
+
+    public slots :
+    void      updateDatas         ( );
   };
 }
