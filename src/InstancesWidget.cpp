@@ -1,5 +1,7 @@
 
 #include "InstancesWidget.h"
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 namespace Netlist {
 
@@ -7,8 +9,8 @@ namespace Netlist {
     : QWidget (parent)
       , cellViewer_ (NULL)
       , baseModel_  (new InstancesModel(this))
-      , view_       (new QTableView(this))
-      , load_       (new QPushButton(this))
+      , view_       (new QTableView())
+      , load_       (new QPushButton())
   {
     // define behaviour on button clicks
     setAttribute ( Qt::WA_QuitOnClose, false );
@@ -30,6 +32,17 @@ namespace Netlist {
     horizontalHeader->setStretchLastSection(true);
     QHeaderView* verticalHeader = view_->verticalHeader();
     verticalHeader->setVisible(false);
+
+    // layout
+    QHBoxLayout* hlayout = new QHBoxLayout();
+    hlayout->addStretch();
+    hlayout->addWidget(load_);
+    hlayout->addStretch();
+
+    QVBoxLayout* vlayout = new QVBoxLayout();
+    vlayout->addWidget(view_);
+    vlayout->addLayout(hlayout);
+    setLayout(vlayout);
 
     // load button
     load_->setText("Load");
