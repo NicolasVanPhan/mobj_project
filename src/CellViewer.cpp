@@ -5,6 +5,7 @@
 #include "SaveCellDialog.h"
 #include "OpenCellDialog.h"
 #include "InstancesWidget.h"
+#include "CellsLib.h"
 
 namespace Netlist {
 
@@ -21,6 +22,7 @@ namespace Netlist {
     saveCellDialog_ = new SaveCellDialog(this);
     openCellDialog_ = new OpenCellDialog(this);
     instancesWidget_ = new InstancesWidget();
+    cellsLib_ = new CellsLib();
 
     setCentralWidget(cellWidget_);
 
@@ -47,6 +49,13 @@ namespace Netlist {
     action->setVisible(true);
     fileMenu->addAction(action);
     connect(action, SIGNAL(triggered()), this, SLOT(showInstancesWidget()));
+    
+    action = new QAction("&Switch cell", this);
+    action->setStatusTip("Switch to another loaded cell");
+    action->setShortcut(QKeySequence("CTRL+C"));
+    action->setVisible(true);
+    fileMenu->addAction(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(showCellsLib()));
 
     action = new QAction("&Quit", this);
     action->setStatusTip("Exit the Netlist Viewer");
@@ -92,10 +101,15 @@ namespace Netlist {
 
   void      CellViewer::showInstancesWidget ( )
   {
-    std::cout << "toto" << std::endl;
     instancesWidget_->setCell(getCell());
     instancesWidget_->setCellViewer(this);
     instancesWidget_->show();
+  }
+
+  void      CellViewer::showCellsLib ( )
+  {
+    cellsLib_->setCellViewer(this);
+    cellsLib_->show(); 
   }
 
   void        CellViewer::setCell ( Cell* cell )

@@ -42,6 +42,8 @@
                                       CellViewer.h
                                       InstancesModel.h 
                                       InstancesWidget.h 
+                                      CellsModel.h 
+                                      CellsLib.h 
                        )
 
                     set( cpps         Indentation.cpp
@@ -67,6 +69,8 @@
                                       CellViewer.cpp
                                       InstancesModel.cpp
                                       InstancesWidget.cpp
+                                      CellsModel.cpp
+                                      CellsLib.cpp
                                       Main.cpp
                        )
 
