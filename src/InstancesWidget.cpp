@@ -18,7 +18,7 @@ namespace Netlist {
     // set tables characteristics
     view_->setShowGrid(false);
     view_->setAlternatingRowColors(true);
-    view_->setSelectionBehaviour(QAbstractItemView::SelectRows);
+    view_->setSelectionBehavior(QAbstractItemView::SelectRows);
     view_->setSelectionMode(QAbstractItemView::SingleSelection);
     view_->setSortingEnabled(true);
     view_->setModel(baseModel_);
@@ -36,8 +36,22 @@ namespace Netlist {
     connect(load_, SIGNAL(clicked()), this, SLOT(load()));
   }
 
-  InstancesWidget::getSelectedRow ( ) const
+  void    InstancesWidget::setCellViewer ( CellViewer* viewer )
+  { cellViewer_ = viewer; }
+
+  int     InstancesWidget::getSelectedRow ( ) const
   {
     QModelIndexList selecteds = view_->selectionModel()->selection().indexes();
+
+    if (selecteds.empty()) return -1;
+    return selecteds.first().row();
+  }
+
+  void    InstancesWidget::load ( )
+  {
+    int row = getSelectedRow();
+
+    if (row < 0) return;
+    cellViewer_->setCell(baseModel_->getModel(row));
   }
 }

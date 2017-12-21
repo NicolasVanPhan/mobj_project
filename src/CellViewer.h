@@ -19,6 +19,7 @@ namespace Netlist {
   class CellWidget;
   class SaveCellDialog;
   class OpenCellDialog;
+  class InstancesWidget;
 
   class CellViewer : public QMainWindow {
     Q_OBJECT;
@@ -30,13 +31,15 @@ namespace Netlist {
     Cell*           getCell       ( ) const;
 
     public slots :
-      void            saveCell      ( );
-      void            openCell      ( );
+      void            saveCell            ( );
+      void            openCell            ( );
+      void            showInstancesWidget ( );
 
     private :
-    CellWidget*     cellWidget_;
-    SaveCellDialog* saveCellDialog_;
-    OpenCellDialog* openCellDialog_;
+    CellWidget*       cellWidget_;
+    SaveCellDialog*   saveCellDialog_;
+    OpenCellDialog*   openCellDialog_;
+    InstancesWidget*  instancesWidget_;
   };
 }
 

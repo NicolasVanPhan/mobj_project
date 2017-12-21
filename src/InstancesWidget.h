@@ -1,7 +1,14 @@
 
 #include <QWidget>
+#include <QTableView>
+#include <QPushButton>
+#include <QHeaderView>
+#include "CellViewer.h"
+#include "InstancesModel.h"
 
 namespace Netlist {
+
+  class Cell;
 
   class InstancesWidget : public QWidget {
     Q_OBJECT;
@@ -21,4 +28,9 @@ namespace Netlist {
     QTableView*       view_;
     QPushButton*      load_;
   };
+
+  inline void InstancesWidget::setCell ( Cell* cell )
+  {
+    baseModel_->setCell(cell);
+  }
 }
