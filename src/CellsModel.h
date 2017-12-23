@@ -12,15 +12,14 @@ namespace Netlist {
     ~CellsModel ( );
 
     // functions expexted by Qt
-    int       rowCount            ( const QModelIndex& parent=QModelIndex() ) const;
-    int       columnCount         ( const QModelIndex& parent=QModelIndex() ) const;
-    QVariant  data                ( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    QVariant  headerData          ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-
+    int       rowCount    ( const QModelIndex& parent=QModelIndex() ) const;
+    int       columnCount ( const QModelIndex& parent=QModelIndex() ) const;
+    QVariant  data        ( const QModelIndex&, int role=Qt::DisplayRole)const;
+    QVariant  headerData  ( int, Qt::Orientation,int role=Qt::DisplayRole)const;
     // custom functions
-    Cell*     getCell             ( int row );
+    Cell*     getCell     ( int row );
 
     public slots :
-    void      updateDatas         ( );
+    void      updateDatas ( );
   };
 }

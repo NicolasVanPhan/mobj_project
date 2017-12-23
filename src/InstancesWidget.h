@@ -23,8 +23,8 @@ namespace Netlist {
       void      load              ( );
 
     private :
-    CellViewer*       cellViewer_;  // main window
-    InstancesModel*   baseModel_;   // associated model (according to MVC paradigm) 
+    CellViewer*       cellViewer_;  // Main Window
+    InstancesModel*   baseModel_;   // Associated Model
     QTableView*       view_;
     QPushButton*      load_;
   };

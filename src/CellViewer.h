@@ -32,10 +32,10 @@ namespace Netlist {
     Cell*           getCell       ( ) const;
 
     public slots :
-      void            saveCell            ( );
-      void            openCell            ( );
-      void            showInstancesWidget ( );
-      void            showCellsLib        ( );
+    void            saveCell            ( );
+    void            openCell            ( );
+    void            showInstancesWidget ( );
+    void            showCellsLib        ( );
 
     signals :
     void            cellLoaded    ( );

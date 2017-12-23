@@ -7,7 +7,7 @@ namespace Netlist {
 
   InstancesModel::InstancesModel    ( QObject* parent )
     : QAbstractTableModel(parent)
-    , cell_(NULL)
+      , cell_(NULL)
   { }
 
   InstancesModel::~InstancesModel   ( )
@@ -19,7 +19,8 @@ namespace Netlist {
   int       InstancesModel::columnCount ( const QModelIndex& parent ) const
   { return 2; } // two columns : Instance and its Mastercell
 
-  QVariant  InstancesModel::data        ( const QModelIndex& index, int role ) const
+  QVariant  InstancesModel::data        ( const QModelIndex& index,
+                                          int role ) const
   {
     // error handling
     if (not cell_ or not index.isValid()) return QVariant();
@@ -31,23 +32,28 @@ namespace Netlist {
         // Instance
         case 0 : return cell_->getInstances()[row]->getName().c_str();
         // MasterCell
-        case 1 : return cell_->getInstances()[row]->getMasterCell()->getName().c_str();
+        case 1 : return cell_->getInstances()[row]->getMasterCell()->
+                 getName().c_str();
       }
     }
     // if the data required is metadata
     return QVariant();
   }
 
-  QVariant  InstancesModel::headerData  ( int section, Qt::Orientation orientation, int role ) const
+  QVariant  InstancesModel::headerData  ( int section,
+                                          Qt::Orientation orientation,
+                                          int role ) const
   {
-    // error handling
-    if (orientation == Qt::Vertical ) return QVariant(); // there's no vertical header here
-    if (role != Qt::DisplayRole )     return QVariant(); // this functions only returns payload, not metadata
+    // Error handling
+    // there's no vertical header here
+    if (orientation == Qt::Vertical ) return QVariant();
+    // this functions only returns payload, not metadata
+    if (role != Qt::DisplayRole )     return QVariant();
 
     switch (section) {
       // Instance column
       case 0: return "Instance";
-      // MasterCell column
+              // MasterCell column
       case 1: return "MasterCell";
     }
     // if column number is invalid
@@ -70,5 +76,4 @@ namespace Netlist {
     // otherwise, everything's okay
     return cell_->getInstances()[row]->getMasterCell();
   }
-
 }

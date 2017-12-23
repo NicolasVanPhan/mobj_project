@@ -16,7 +16,7 @@ namespace Netlist {
     Q_OBJECT;
 
     public :
-    OpenCellDialog ( QWidget* parent = NULL );
+                    OpenCellDialog ( QWidget* parent = NULL );
     bool            run            ( QString& name );
     const QString   getCellName    ( ) const;
     void            setCellName    ( const QString& );

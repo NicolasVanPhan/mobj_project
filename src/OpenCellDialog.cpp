@@ -12,19 +12,16 @@ namespace Netlist {
     :QDialog (parent)
      ,lineEdit_(NULL)
   {
-    /* -------- Step 1 : Set all widgets inside -------- */
+    /* -------- Step 1 : Set all sub-widgets -------- */
     setWindowTitle(tr("Open Cell"));
 
     QLabel* label = new QLabel();
     label->setText(tr("Enter Cell name (without extention)"));
-
     lineEdit_ = new QLineEdit();
     lineEdit_->setMinimumWidth(400);
-
     QPushButton* okButton = new QPushButton();
     okButton->setText("OK");
     okButton->setDefault(true);
-
     QPushButton* cancelButton = new QPushButton();
     cancelButton->setText("Cancel");
 
@@ -43,7 +40,7 @@ namespace Netlist {
     vLayout->addWidget(label);
     vLayout->addWidget(lineEdit_);
     vLayout->addLayout(hLayout);
-    // Setup the whole thing
+
     setLayout(vLayout);
 
     /* -------- Step 3 : Handle events (sig/slots) -------- */
@@ -63,5 +60,5 @@ namespace Netlist {
     name = getCellName();       // get the cell name entered by the user
     return (dialogResult == Accepted);  // return whether everything went well
   }
-
 }
+
