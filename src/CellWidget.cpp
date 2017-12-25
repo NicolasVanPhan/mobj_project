@@ -69,6 +69,40 @@ namespace Netlist {
   void  CellWidget::resizeEvent ( QResizeEvent* event )
   { repaint(); }
 
+  void  CellWidget::keyPressEvent ( QKeyEvent* event )
+  {
+    event->ignore();
+    if (event->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier))
+      return;
+
+    switch (event->key()) {
+    case Qt::Key_Up:      goUp (); break;
+    case Qt::Key_Down:    goDown (); break;
+    case Qt::Key_Left:    goLeft (); break;
+    case Qt::Key_Right:   goRight (); break;
+    }
+    event->accept();
+  }
+
+  void  CellWidget::goUp    ( ) {
+    viewport_.translate( Point(0, -20) );
+    repaint();
+  }
+
+  void  CellWidget::goDown    ( ) {
+    viewport_.translate( Point(0, 20) );
+    repaint();
+  }
+
+  void  CellWidget::goLeft    ( ) {
+    viewport_.translate( Point(-20, 0) );
+    repaint();
+  }
+
+  void  CellWidget::goRight    ( ) {
+    viewport_.translate( Point(20, 0) );
+    repaint();
+  }
 
   void  CellWidget::paintEvent ( QPaintEvent* event )
   {
@@ -84,8 +118,8 @@ namespace Netlist {
 
     int frameWidth  = 460;
     int frameHeight = 100;
-    QRect nameRect ( (size().width ()-frameWidth )/2
-                   , (size().height()-frameHeight)/2
+    QRect nameRect ( (size().width ()-frameWidth )/2 + viewport_.getX1()
+                   , (size().height()-frameHeight)/2 + viewport_.getY1()
                    , frameWidth
                    , frameHeight
                    );
