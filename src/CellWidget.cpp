@@ -40,6 +40,7 @@ namespace Netlist {
   CellWidget::CellWidget ( QWidget* parent )
     : QWidget(parent)
     , cell_  (NULL)
+    , viewport_ (Box(0, 0, 500, 500))
   {
     setAttribute    ( Qt::WA_OpaquePaintEvent );
     setAttribute    ( Qt::WA_NoSystemBackground );
