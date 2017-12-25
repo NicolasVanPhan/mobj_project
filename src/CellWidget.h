@@ -35,13 +35,14 @@ namespace Netlist {
       inline  Point   screenPointToPoint ( const QPoint& ) const;
       virtual QSize   minimumSizeHint    () const;
       virtual void    resizeEvent        ( QResizeEvent* );
+    protected:
+      virtual void    paintEvent         ( QPaintEvent* );
       virtual void    keyPressEvent      ( QKeyEvent* );
+    public slots :
               void    goUp               ( );
               void    goDown             ( );
               void    goLeft             ( );
               void    goRight            ( );
-    protected:
-      virtual void    paintEvent         ( QPaintEvent* );
     private:
       Cell* cell_;
       Box   viewport_;
