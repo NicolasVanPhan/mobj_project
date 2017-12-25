@@ -67,7 +67,13 @@ namespace Netlist {
 
 
   void  CellWidget::resizeEvent ( QResizeEvent* event )
-  { repaint(); }
+  {
+    const QSize& size = event->size();
+
+    viewport_.setX2(viewport_.getX1() + size.width());
+    viewport_.setY1(viewport_.getY2() - size.height());
+    repaint();
+  }
 
   void  CellWidget::keyPressEvent ( QKeyEvent* event )
   {
@@ -85,12 +91,12 @@ namespace Netlist {
   }
 
   void  CellWidget::goUp    ( ) {
-    viewport_.translate( Point(0, -20) );
+    viewport_.translate( Point(0, 20) );
     repaint();
   }
 
   void  CellWidget::goDown    ( ) {
-    viewport_.translate( Point(0, 20) );
+    viewport_.translate( Point(0, -20) );
     repaint();
   }
 
@@ -118,8 +124,8 @@ namespace Netlist {
 
     int frameWidth  = 460;
     int frameHeight = 100;
-    QRect nameRect ( (size().width ()-frameWidth )/2 + viewport_.getX1()
-                   , (size().height()-frameHeight)/2 + viewport_.getY1()
+    QRect nameRect ( xToScreenX(100)
+                   , yToScreenY(100)
                    , frameWidth
                    , frameHeight
                    );
