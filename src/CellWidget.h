@@ -65,15 +65,15 @@ namespace Netlist {
   inline  QRect   CellWidget::boxToScreenRect    ( const Box& box) const
   {
     int x = xToScreenX(box.getX1());
-    int y = yToScreenY(box.getY1());
+    int y = yToScreenY(box.getY2());
     return QRect (x, y, box.getWidth(), box.getHeight());
   }
 
   inline  Box     CellWidget::screenRectToBox    ( const QRect& qrect) const
   {
     int x1 = screenXToX(qrect.x());
-    int y1 = screenYToY(qrect.y());
-    return Box (x1, y1, x1 + qrect.width(), y1 + qrect.height());
+    int y2 = screenYToY(qrect.y());
+    return Box (x1, y2 - qrect.height(), x1 + qrect.width(), y2);
   }
 
   inline  QPoint  CellWidget::pointToScreenPoint ( const Point& point) const

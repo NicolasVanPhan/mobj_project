@@ -126,6 +126,11 @@ namespace Netlist {
 
     painter.drawRect( nameRect );
     painter.drawText( nameRect, Qt::AlignCenter, cellName );
+    // Draw the viewport
+    painter.setPen( QPen(Qt::red, 0) );
+    QRect viewRect = boxToScreenRect(viewport_);
+    viewRect.adjust(0, 0, -1, -1);
+    painter.drawRect( viewRect );
   }
 
 
