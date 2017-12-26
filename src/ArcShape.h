@@ -32,6 +32,8 @@ namespace Netlist {
       // Accessors
       Box                 getBoundingBox  () const;
       void                toXml           ( std::ostream& ) const;
+      inline int          getStart        ( ) const;
+      inline int          getSpan         ( ) const;
 
       // Modificators
       
@@ -41,6 +43,13 @@ namespace Netlist {
       int                 start_;
       int                 span_;
   };
+
+  inline int          ArcShape::getStart        ( ) const
+  { return start_; }
+
+  inline int          ArcShape::getSpan         ( ) const
+  { return span_; }
+
 }
 
 #endif

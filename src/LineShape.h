@@ -30,6 +30,10 @@ namespace Netlist {
       // Accessors
       Box                 getBoundingBox() const;
       void                toXml          ( std::ostream& ) const;
+      inline int          getX1          ( ) const;
+      inline int          getX2          ( ) const;
+      inline int          getY1          ( ) const;
+      inline int          getY2          ( ) const;
 
       // Modificators
       
@@ -40,6 +44,19 @@ namespace Netlist {
       int                 x2_;
       int                 y2_;
   };
+
+  inline int    LineShape::getX1 ( ) const
+  { return x1_; }
+
+  inline int    LineShape::getX2 ( ) const
+  { return x2_; }
+
+  inline int    LineShape::getY1 ( ) const
+  { return y1_; }
+
+  inline int    LineShape::getY2 ( ) const
+  { return y2_; }
+
 }
 
 #endif

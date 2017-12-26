@@ -11,6 +11,10 @@
 #include  "Instance.h"
 #include  "Symbol.h"
 #include  "Shape.h"
+#include  "BoxShape.h"
+#include  "LineShape.h"
+#include  "ArcShape.h"
+#include  "EllipseShape.h"
 #include  "Cell.h"
 #include  "Line.h"
 #include  "Node.h"
@@ -137,7 +141,56 @@ namespace Netlist {
     QRect viewRect = boxToScreenRect(viewport_);
     viewRect.adjust(0, 0, -1, -1);
     painter.drawRect( viewRect );
-  }
 
+    // Draw the cell
+    //std::cout << "Cell name : " << cell_->getName() << std::endl;
+    const vector<Instance*>& instances = cell_->getInstances();
+    // for each instance
+    for (size_t i = 0; i < instances.size(); i++) {
+      //std::cout << "Got one instance: " << instances[i]->getName() << std::endl;
+      Point         instPos = instances[i]->getPosition();
+      //std::cerr << "position : " << instPos << std::endl;
+      const Symbol* symbol  = instances[i]->getMasterCell()->getSymbol();
+      if (not symbol) continue;
+      //std::cerr << "Got symbol" << std::endl;
+      const vector<Shape*>& shapes = symbol->getShapes();
+      for (size_t j = 0; j < shapes.size(); j++) {
+        //std::cerr << "Got a shape" << std::endl;
+        BoxShape*     box       = dynamic_cast<BoxShape*>(shapes[j]);
+        LineShape*    line      = dynamic_cast<LineShape*>(shapes[j]);
+        ArcShape*     arc       = dynamic_cast<ArcShape*>(shapes[j]);
+        EllipseShape* ellipse   = dynamic_cast<EllipseShape*>(shapes[j]);
+        if (box) {      // Box drawing
+          painter.setPen( QPen(Qt::darkGreen, 2) );
+          QRect rect = boxToScreenRect(box->getBoundingBox().translate(instPos));
+          painter.drawRect(rect);
+        }
+        if (line) {     // Line drawing
+          //std::cout << "Got a line!" << std::endl;
+          painter.setPen( QPen(Qt::darkGreen, 2) );
+          QLine qline (xToScreenX(line->getX1() + instPos.getX()),
+              yToScreenY(line->getY1() + instPos.getY()),
+              xToScreenX(line->getX2() + instPos.getX()),
+              yToScreenY(line->getY2() + instPos.getY()));
+          painter.drawLine(qline);
+        }
+        if (arc) {      // Arc drawing
+          painter.setPen( QPen(Qt::darkGreen, 2) );
+          //std::cout << "Got an arc!" << std::endl;
+          painter.drawArc(boxToScreenRect(arc->getBoundingBox().translate(instPos)),
+              arc->getStart() * 16, arc->getSpan() * 16);
+        }
+        if (ellipse) {
+          painter.setPen( QPen(Qt::darkGreen, 2) );
+          QRect rect = boxToScreenRect(ellipse->getBoundingBox().translate(instPos));
+          painter.drawEllipse(rect);
+        }
+        //Box   box = shapes[j]->getBoundingBox();
+        //QRect rect = boxToScreenRect(box.translate(instPos));
+        //painter.setPen( QPen(Qt::red, 0) );
+        //painter.drawRect(rect);
+      }
+    }
+  }
 
 }  // Netlist namespace.
