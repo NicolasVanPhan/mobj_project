@@ -15,6 +15,7 @@
 #include  "LineShape.h"
 #include  "ArcShape.h"
 #include  "EllipseShape.h"
+#include  "TermShape.h"
 #include  "Cell.h"
 #include  "Line.h"
 #include  "Node.h"
@@ -117,6 +118,7 @@ namespace Netlist {
   void  CellWidget::paintEvent ( QPaintEvent* event )
   {
     QFont  bigFont = QFont( "URW Bookman L", 36 );
+    QFont  smallFont = QFont( "URW Bookman L", 9, QFont::Bold);
 
     QString cellName = "NULL";
     if (cell_) cellName = cell_->getName().c_str();
@@ -141,21 +143,16 @@ namespace Netlist {
     QRect viewRect = boxToScreenRect(viewport_);
     viewRect.adjust(0, 0, -1, -1);
     painter.drawRect( viewRect );
-
-    // Draw the cell
-    //std::cout << "Cell name : " << cell_->getName() << std::endl;
+    // Draw Instances
     const vector<Instance*>& instances = cell_->getInstances();
-    // for each instance
     for (size_t i = 0; i < instances.size(); i++) {
-      //std::cout << "Got one instance: " << instances[i]->getName() << std::endl;
       Point         instPos = instances[i]->getPosition();
-      //std::cerr << "position : " << instPos << std::endl;
       const Symbol* symbol  = instances[i]->getMasterCell()->getSymbol();
       if (not symbol) continue;
-      //std::cerr << "Got symbol" << std::endl;
+
+      // Draw Symbol (except terms)
       const vector<Shape*>& shapes = symbol->getShapes();
       for (size_t j = 0; j < shapes.size(); j++) {
-        //std::cerr << "Got a shape" << std::endl;
         BoxShape*     box       = dynamic_cast<BoxShape*>(shapes[j]);
         LineShape*    line      = dynamic_cast<LineShape*>(shapes[j]);
         ArcShape*     arc       = dynamic_cast<ArcShape*>(shapes[j]);
@@ -166,7 +163,6 @@ namespace Netlist {
           painter.drawRect(rect);
         }
         if (line) {     // Line drawing
-          //std::cout << "Got a line!" << std::endl;
           painter.setPen( QPen(Qt::darkGreen, 2) );
           QLine qline (xToScreenX(line->getX1() + instPos.getX()),
               yToScreenY(line->getY1() + instPos.getY()),
@@ -176,7 +172,6 @@ namespace Netlist {
         }
         if (arc) {      // Arc drawing
           painter.setPen( QPen(Qt::darkGreen, 2) );
-          //std::cout << "Got an arc!" << std::endl;
           painter.drawArc(boxToScreenRect(arc->getBoundingBox().translate(instPos)),
               arc->getStart() * 16, arc->getSpan() * 16);
         }
@@ -185,11 +180,56 @@ namespace Netlist {
           QRect rect = boxToScreenRect(ellipse->getBoundingBox().translate(instPos));
           painter.drawEllipse(rect);
         }
-        //Box   box = shapes[j]->getBoundingBox();
-        //QRect rect = boxToScreenRect(box.translate(instPos));
-        //painter.setPen( QPen(Qt::red, 0) );
-        //painter.drawRect(rect);
       }
+
+      // Then draw terms
+      for (size_t j = 0; j < shapes.size(); j++) {
+        TermShape*    term      = dynamic_cast<TermShape*>(shapes[j]);
+        if (term) {
+          int termWidth = 2;
+          int textBoxLength = 50;
+
+          // Draw the term itself (a red square)
+          painter.setPen( QPen(Qt::darkRed, termWidth) );
+          painter.setBrush( QBrush(Qt::darkRed, Qt::SolidPattern) );
+          QRect rect = boxToScreenRect(term->getBoundingBox().inflate(3).translate(instPos));
+          painter.drawRect(rect);
+
+          // Draw the terminal name aside
+          Point textBoxAlign;
+          int   textBoxShift = textBoxLength + termWidth;
+          int   textAlign;
+          switch (term->getAlign()) {
+            case TermShape::TopLeft :
+              textBoxAlign = Point ( -textBoxShift, textBoxShift );
+              textAlign = Qt::AlignBottom | Qt::AlignRight;
+            break;
+            case TermShape::TopRight :
+              textBoxAlign = Point ( textBoxShift, textBoxShift );
+              textAlign = Qt::AlignBottom | Qt::AlignLeft;
+            break;
+            case TermShape::BottomLeft :
+              textBoxAlign = Point ( -textBoxShift, -textBoxShift );
+              textAlign = Qt::AlignTop | Qt::AlignRight;
+            break;
+            case TermShape::BottomRight :
+              textBoxAlign = Point ( textBoxShift, -textBoxShift );
+              textAlign = Qt::AlignTop | Qt::AlignLeft;
+            break;
+            default : // align top left
+              textBoxAlign = Point ( -textBoxShift, textBoxShift );
+              textAlign = Qt::AlignBottom | Qt::AlignRight;
+            break;
+          }
+          painter.setFont( smallFont );
+          Box textBox = term->getBoundingBox().inflate(textBoxLength).translate(textBoxAlign).translate(instPos);
+          QRect textRect = boxToScreenRect( textBox );
+          painter.setBrush( Qt::NoBrush );
+          painter.drawText( textRect, textAlign, term->getTerm()->getName().c_str() );
+        }
+      }
+
+      // Draw Terminals
     }
   }
 

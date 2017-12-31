@@ -31,6 +31,7 @@ namespace Netlist {
       // Accessors
               Box         getBoundingBox  () const;
       inline  Term*       getTerm         () const;
+      inline  NameAlign   getAlign        () const;
       inline  int         getX            () const;
       inline  int         getY            () const;
               void        toXml           ( std::ostream& ) const;
@@ -49,6 +50,9 @@ namespace Netlist {
 
   inline  Term*       TermShape::getTerm         () const
   { return term_; }
+
+  inline TermShape::NameAlign    TermShape::getAlign        () const
+  { return align_; }
 
   inline  int         TermShape::getX            () const
   { return x_; }
