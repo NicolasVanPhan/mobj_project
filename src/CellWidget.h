@@ -16,6 +16,7 @@ namespace Netlist {
 
   class Cell;
   class NodeTerm;
+  class Instance;
 
 
   class CellWidget : public QWidget {
@@ -37,6 +38,10 @@ namespace Netlist {
       virtual void    resizeEvent        ( QResizeEvent* );
     protected:
       virtual void    paintEvent         ( QPaintEvent* );
+              void    drawInstances      ( Cell*, QPainter* );
+              void    drawExternalTerms  ( QPainter* );
+              void    drawInternalTerms  ( Instance*, QPainter* );
+              void    drawShapes         ( Instance* , QPainter*);
       virtual void    keyPressEvent      ( QKeyEvent* );
     public slots :
               void    goUp               ( );
