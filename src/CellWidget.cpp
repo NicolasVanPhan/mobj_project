@@ -182,17 +182,17 @@ namespace Netlist {
         }
       }
 
-      // Then draw terms
+      // Then draw symbol terms
       for (size_t j = 0; j < shapes.size(); j++) {
         TermShape*    term      = dynamic_cast<TermShape*>(shapes[j]);
         if (term) {
-          int termWidth = 2;
+          int termWidth = 3;
           int textBoxLength = 50;
 
           // Draw the term itself (a red square)
-          painter.setPen( QPen(Qt::darkRed, termWidth) );
+          painter.setPen( QPen(Qt::darkRed, 1) );
           painter.setBrush( QBrush(Qt::darkRed, Qt::SolidPattern) );
-          QRect rect = boxToScreenRect(term->getBoundingBox().inflate(3).translate(instPos));
+          QRect rect = boxToScreenRect(term->getBoundingBox().inflate(termWidth).translate(instPos));
           painter.drawRect(rect);
 
           // Draw the terminal name aside
@@ -228,9 +228,59 @@ namespace Netlist {
           painter.drawText( textRect, textAlign, term->getTerm()->getName().c_str() );
         }
       }
-
-      // Draw Terminals
     }
+
+    // Draw External Terms
+    std::vector<Term*> extTerms = cell_->getTerms();
+    int termWidth = 6;
+    int textBoxLength = 50;
+    for (size_t i = 0; i < extTerms.size(); i++) {
+
+      // Draw the terminal itself
+      Term* term = extTerms[i];
+      Point termPos = term->getNode()->getPosition();
+      QPoint points[5];
+      if (term->getDirection() == Term::In) {
+          points[0] = pointToScreenPoint( Point (termPos.getX() - termWidth   , termPos.getY() + termWidth) );
+          points[1] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() + termWidth) );
+          points[2] = pointToScreenPoint( Point (termPos.getX() + termWidth   , termPos.getY()            ) );
+          points[3] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() - termWidth) );
+          points[4] = pointToScreenPoint( Point (termPos.getX() - termWidth   , termPos.getY() - termWidth) );
+      }
+      else { // External
+          points[0] = pointToScreenPoint( Point (termPos.getX() + termWidth   , termPos.getY() - termWidth) );
+          points[1] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() - termWidth) );
+          points[2] = pointToScreenPoint( Point (termPos.getX() - termWidth   , termPos.getY()            ) );
+          points[3] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() + termWidth) );
+          points[4] = pointToScreenPoint( Point (termPos.getX() + termWidth   , termPos.getY() + termWidth) );
+      }
+      painter.setPen( QPen(Qt::darkRed, 1) );
+      painter.setBrush( QBrush(Qt::darkRed, Qt::SolidPattern) );
+      painter.drawPolygon(points, 5);
+
+      // Draw the terminal name aside
+      Point textBoxAlign;
+      int   textBoxShift = textBoxLength + termWidth;
+      int   textAlign;
+      if (term->getDirection() == Term::In) {
+        // align bottom left
+        textBoxAlign = Point ( -textBoxShift, -textBoxShift );
+        textAlign = Qt::AlignTop | Qt::AlignRight;
+      }
+      else {
+        // align bottom right
+        textBoxAlign = Point ( textBoxShift, -textBoxShift );
+        textAlign = Qt::AlignTop | Qt::AlignLeft;
+      }
+      painter.setFont( smallFont );
+      Box textBox = Box( termPos.getX(), termPos.getY(), termPos.getX(), termPos.getY() );
+      textBox.inflate(textBoxLength).translate(textBoxAlign);
+      QRect textRect = boxToScreenRect( textBox );
+      painter.setBrush( Qt::NoBrush );
+      painter.drawText( textRect, textAlign, term->getName().c_str() );
+
+    }
+
   }
 
 }  // Netlist namespace.
