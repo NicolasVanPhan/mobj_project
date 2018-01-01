@@ -151,6 +151,7 @@ namespace Netlist {
     // Draw the whole cell
     drawInstances(cell_, &painter);
     drawExternalTerms(&painter);
+    drawNets(cell_, &painter);
   }
 
   void    CellWidget::drawInstances       ( Cell* cell, QPainter* painter ) {
@@ -323,6 +324,26 @@ namespace Netlist {
       painter->setFont( smallFont );
       painter->setBrush( Qt::NoBrush );
       painter->drawText( textRect, textAlign, term->getName().c_str() );
+    }
+  }
+
+  void    CellWidget::drawNets    ( Cell* cell, QPainter* painter ) {
+    std::vector<Net*> nets = cell->getNets();
+
+    // For each Net
+    for (size_t i = 0; i < nets.size(); i++) {
+      /* Draw the lines */
+      const std::vector<Line*>& lines = nets[i]->getLines();
+      for (size_t j = 0; j < lines.size(); j++) {
+        // Get the line
+        Point srcPos = lines[j]->getSourcePosition();
+        Point destPos = lines[j]->getTargetPosition();
+        QLine qline( pointToScreenPoint(srcPos), pointToScreenPoint(destPos) );
+        // Set the pen
+        painter->setPen( QPen(Qt::cyan, 1) );
+        // Draw the line
+        painter->drawLine(qline);
+      }
     }
   }
 

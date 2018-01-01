@@ -42,6 +42,7 @@ namespace Netlist {
               void    drawExternalTerms  ( QPainter* );
               void    drawInternalTerms  ( Instance*, QPainter* );
               void    drawShapes         ( Instance* , QPainter*);
+              void    drawNets           ( Cell*, QPainter* );
       virtual void    keyPressEvent      ( QKeyEvent* );
     public slots :
               void    goUp               ( );

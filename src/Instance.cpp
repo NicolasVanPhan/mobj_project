@@ -1,5 +1,6 @@
 
 #include "Instance.h"
+#include "TermShape.h"
 
 namespace Netlist {
 
@@ -80,13 +81,41 @@ namespace Netlist {
 
   void  Instance::setPosition   ( const Point& point )
   {
+    // Positioning the Instance itself
     position_ = point;
+
+    // Positioning the Instance's Terminals
+    std::vector<Shape*> shapes = owner_->getSymbol()->getShapes();
+    for (size_t i = 0; i < shapes.size(); i++) {
+      TermShape*  tshape = dynamic_cast<TermShape*>(shapes[i]);
+      if (tshape == NULL) continue;
+      Term*       term = getTerm(tshape->getTerm()->getName());
+      if (term == NULL) continue;
+      Point       tshapePos = Point(tshape->getX(), tshape->getY());
+      term->getNode()->setPosition(tshapePos.translate(point));
+    }
   }
 
   void  Instance::setPosition   ( int x, int y )
   {
+    std::cout << "Entering Instance::setPosition()..." << std::endl;
+    // Positioning the Instance itself
     position_.setX(x);
     position_.setY(y);
+
+    // Positioning the Instance's Terminals
+    Point point(x, y);
+    const std::vector<Shape*> shapes = masterCell_->getSymbol()->getShapes();
+    std::cout << "size of shapes : " << shapes.size() << std::endl;
+    for (size_t i = 0; i < shapes.size(); i++) {
+      TermShape*  tshape = dynamic_cast<TermShape*>(shapes[i]);
+      if (tshape == NULL) continue;
+      Term*       term = getTerm(tshape->getTerm()->getName());
+      if (term == NULL) continue;
+      Point       tshapePos = Point(tshape->getX(), tshape->getY());
+      term->getNode()->setPosition(tshapePos.translate(point));
+      std::cout << "Term position : " << term->getNode()->getPosition() << std::endl;
+    }
   }
 
   // In what situation could those be used ?
