@@ -87,10 +87,10 @@ namespace Netlist {
       return;
 
     switch (event->key()) {
-    case Qt::Key_Up:      goUp (); break;
-    case Qt::Key_Down:    goDown (); break;
-    case Qt::Key_Left:    goLeft (); break;
-    case Qt::Key_Right:   goRight (); break;
+      case Qt::Key_Up:      goUp (); break;
+      case Qt::Key_Down:    goDown (); break;
+      case Qt::Key_Left:    goLeft (); break;
+      case Qt::Key_Right:   goRight (); break;
     }
     event->accept();
   }
@@ -132,7 +132,7 @@ namespace Netlist {
     painter.eraseRect    ( QRect( QPoint(0,0), size() ) );
 
     // Draw default figure (a gray frame with the cell's name inside)
-    int frameWidth  = 460;
+    /* int frameWidth  = 460;
     int frameHeight = 100;
     QRect nameRect ( xToScreenX(100)
                    , yToScreenY(100)
@@ -140,15 +140,9 @@ namespace Netlist {
                    , frameHeight
                    );
     painter.drawRect( nameRect );
-    painter.drawText( nameRect, Qt::AlignCenter, cellName );
+    painter.drawText( nameRect, Qt::AlignCenter, cellName ); */
 
-    // Draw the viewport
-    painter.setPen( QPen(Qt::red, 0) );
-    QRect viewRect = boxToScreenRect(viewport_);
-    viewRect.adjust(0, 0, -1, -1);
-    painter.drawRect( viewRect );
-
-    // Draw the whole cell
+    // Draw the current cell
     drawNets(cell_, &painter);
     drawInstances(cell_, &painter);
     drawExternalTerms(&painter);
@@ -161,21 +155,22 @@ namespace Netlist {
 
     // For each Instance
     for (size_t i = 0; i < instances.size(); i++) {
+      // Get the shapes to draw
       symbol  = instances[i]->getMasterCell()->getSymbol();
       if (not symbol) continue;
       shapes = symbol->getShapes();
-
+      // Then draw them
       drawShapes(instances[i], painter);
       drawInternalTerms(instances[i], painter);
     }
   }
 
-  void    CellWidget::drawShapes          ( Instance* instance , QPainter* painter) {
+  void    CellWidget::drawShapes   ( Instance* instance , QPainter* painter) {
     Point         instPos = instance->getPosition();
     const Symbol* symbol  = instance->getMasterCell()->getSymbol();
     if (not symbol) return;
 
-    // Draw Symbol (except terms)
+    // Draw all the symbol's shapes (except terms)
     const vector<Shape*>& shapes = symbol->getShapes();
     for (size_t j = 0; j < shapes.size(); j++) {
       BoxShape*     box       = dynamic_cast<BoxShape*>(shapes[j]);
@@ -198,8 +193,10 @@ namespace Netlist {
       }
       else if (arc) {       // Arc drawing
         painter->setPen( QPen(Qt::darkGreen, 2) );
-        painter->drawArc(boxToScreenRect(arc->getBoundingBox().translate(instPos)),
-            arc->getStart() * 16, arc->getSpan() * 16);
+        /* the arc's start and span are angles in degrees, however drawArc()
+         * expect to have angles in 1/16th of degree, hence the *16 */
+        QRect rect = boxToScreenRect(arc->getBoundingBox().translate(instPos));
+        painter->drawArc(rect, arc->getStart() * 16, arc->getSpan() * 16);
       }
       else if (ellipse) {   // Ellipse drawing
         painter->setPen( QPen(Qt::darkGreen, 2) );
@@ -209,27 +206,32 @@ namespace Netlist {
     }
   }
 
-  void    CellWidget::drawInternalTerms   ( Instance* instance, QPainter* painter ) {
+  void CellWidget::drawInternalTerms ( Instance* instance, QPainter* painter ) {
     Point         instPos = instance->getPosition();
     const Symbol* symbol  = instance->getMasterCell()->getSymbol();
     QFont         smallFont = QFont( "URW Bookman L", 9, QFont::Bold);
     if (not symbol) return;
     const vector<Shape*>& shapes = symbol->getShapes();
 
+    // For each shape of the instance's symbol
     for (size_t j = 0; j < shapes.size(); j++) {
       TermShape*    term            = dynamic_cast<TermShape*>(shapes[j]);
-      int           termWidth       = 3;
-      int           textBoxLength   = 50;
+      int           termWidth       = 6;
+      int           textBoxLength   = 100;
+
+      // if the current shape is a term, draw it
       if (term) {
         /* Draw the term itself */
         painter->setPen( QPen(Qt::darkRed, 1) );
         painter->setBrush( QBrush(Qt::darkRed, Qt::SolidPattern) );
-        QRect rect = boxToScreenRect(term->getBoundingBox().inflate(termWidth).translate(instPos));
+        QRect rect = boxToScreenRect(term->getBoundingBox().inflate(termWidth/2)
+            .translate(instPos));
         painter->drawRect(rect);
 
         /* Draw the terminal name */
+        // Set the textbox alignment
         Point textBoxAlign;
-        int   textBoxShift = textBoxLength + termWidth;
+        int   textBoxShift = textBoxLength/2 + termWidth/2;
         int   textAlign;
         switch (term->getAlign()) {
           case TermShape::TopLeft :
@@ -255,13 +257,15 @@ namespace Netlist {
         }
 
         // Set the text framebox
-        Box textBox = term->getBoundingBox().inflate(textBoxLength).translate(textBoxAlign).translate(instPos);
+        Box textBox = term->getBoundingBox().inflate(textBoxLength/2)
+          .translate(textBoxAlign).translate(instPos);
         QRect textRect = boxToScreenRect( textBox );
 
         // Draw the terminal name
         painter->setFont( smallFont );
         painter->setBrush( Qt::NoBrush );
-        painter->drawText( textRect, textAlign, term->getTerm()->getName().c_str() );
+        painter->drawText( textRect, textAlign,
+            term->getTerm()->getName().c_str() );
       }
     }
   }
@@ -269,8 +273,8 @@ namespace Netlist {
   void    CellWidget::drawExternalTerms   ( QPainter* painter) {
     std::vector<Term*>  extTerms = cell_->getTerms();
     QFont               smallFont = QFont( "URW Bookman L", 9, QFont::Bold);
-    int                 termWidth = 6;
-    int                 textBoxLength = 50;
+    int                 termWidth = 12;
+    int                 textBoxLength = 100;
 
     // Foreach external terminal
     for (size_t i = 0; i < extTerms.size(); i++) {
@@ -279,20 +283,30 @@ namespace Netlist {
       Point   termPos = term->getNode()->getPosition();
       QPoint  points[5];
 
-      // Construct the polygon of the external polygon
+      // Construct the polygon of the external terminal
       if (term->getDirection() == Term::In) {
-        points[0] = pointToScreenPoint( Point (termPos.getX() - termWidth   , termPos.getY() + termWidth) );
-        points[1] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() + termWidth) );
-        points[2] = pointToScreenPoint( Point (termPos.getX() + termWidth   , termPos.getY()            ) );
-        points[3] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() - termWidth) );
-        points[4] = pointToScreenPoint( Point (termPos.getX() - termWidth   , termPos.getY() - termWidth) );
+        points[0] = pointToScreenPoint(
+            Point (termPos.getX()-termWidth/2, termPos.getY()+termWidth/2) );
+        points[1] = pointToScreenPoint(
+            Point (termPos.getX()            , termPos.getY()+termWidth/2) );
+        points[2] = pointToScreenPoint(
+            Point (termPos.getX()+termWidth/2, termPos.getY()            ) );
+        points[3] = pointToScreenPoint(
+            Point (termPos.getX()            , termPos.getY()-termWidth/2) );
+        points[4] = pointToScreenPoint(
+            Point (termPos.getX()-termWidth/2, termPos.getY()-termWidth/2) );
       }
-      else { // External
-        points[0] = pointToScreenPoint( Point (termPos.getX() + termWidth   , termPos.getY() - termWidth) );
-        points[1] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() - termWidth) );
-        points[2] = pointToScreenPoint( Point (termPos.getX() - termWidth   , termPos.getY()            ) );
-        points[3] = pointToScreenPoint( Point (termPos.getX()               , termPos.getY() + termWidth) );
-        points[4] = pointToScreenPoint( Point (termPos.getX() + termWidth   , termPos.getY() + termWidth) );
+      else { // term->getDirection() == Term::Out
+        points[0] = pointToScreenPoint(
+            Point (termPos.getX()+termWidth/2 , termPos.getY()-termWidth/2) );
+        points[1] = pointToScreenPoint(
+            Point (termPos.getX()             , termPos.getY()-termWidth/2) );
+        points[2] = pointToScreenPoint(
+            Point (termPos.getX()-termWidth/2 , termPos.getY()            ) );
+        points[3] = pointToScreenPoint(
+            Point (termPos.getX()             , termPos.getY()+termWidth/2) );
+        points[4] = pointToScreenPoint(
+            Point (termPos.getX()+termWidth/2 , termPos.getY()+termWidth/2) );
       }
 
       // Draw the terminal
@@ -302,7 +316,7 @@ namespace Netlist {
 
       /* Draw the terminal name */
       Point textBoxAlign;
-      int   textBoxShift = textBoxLength + termWidth;
+      int   textBoxShift = textBoxLength/2 + termWidth/2;
       int   textAlign;
 
       // Set text alignment
@@ -316,8 +330,9 @@ namespace Netlist {
       }
 
       // Set the text framebox
-      Box textBox = Box( termPos.getX(), termPos.getY(), termPos.getX(), termPos.getY() );
-      textBox.inflate(textBoxLength).translate(textBoxAlign);
+      Box textBox = Box( termPos.getX(), termPos.getY(), termPos.getX(),
+          termPos.getY() );
+      textBox.inflate(textBoxLength/2).translate(textBoxAlign);
       QRect textRect = boxToScreenRect( textBox );
 
       // Draw the terminal name
